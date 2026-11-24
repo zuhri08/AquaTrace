@@ -27,3 +27,12 @@ menyediakan implementasi atau data proyek.
 - Pembuatan API key demo memperlihatkan key mentah hanya saat seed berjalan;
   basis data hanya menyimpan hash SHA-256. Kredensial seed bersifat lokal/demo,
   bukan untuk lingkungan publik.
+- `Stack.pop()` dan `Stack.peek()` melempar `IndexError` saat kosong; operasi
+  baca/hapus Queue dan Linked List mengembalikan `None` jika tidak ada elemen.
+- `PriorityAwareQueue` menjaga FIFO pada tiap lajur dan selalu mengeluarkan
+  antrean prioritas sebelum antrean reguler.
+- Graph adalah berarah; bobot edge wajib positif dan berhingga. Edge ganda
+  dengan arah sama serta edge ke diri sendiri ditolak.
+- Node keputusan memakai kondisi biner `feature/operator/threshold` dengan dua
+  cabang dan daun yang memiliki vonis. Evaluasi mengembalikan jejak kondisi;
+  konfigurasi ambang untuk produk akan ditambahkan pada fase diagnosis.
