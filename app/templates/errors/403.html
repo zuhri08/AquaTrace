@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Akses ditolak — AquaTrace{% endblock %}
+{% block content %}
+<section class="error-card">
+  <p class="eyebrow">403 · AKSES DITOLAK</p>
+  <h1>Halaman ini tidak tersedia untuk akun Anda.</h1>
+  <p>Periksa role akun atau kembali ke beranda.</p>
+  <a class="button button-dark" href="{{ url_for('pages.landing') }}">Kembali ke beranda</a>
+</section>
+{% endblock %}

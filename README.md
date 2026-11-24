@@ -36,6 +36,17 @@ DATABASE_URL=mysql+pymysql://aquatrace:password@localhost:3306/aquatrace?charset
 `PyMySQL` sudah dicantumkan sebagai driver. Jangan gunakan kredensial contoh di
 lingkungan publik.
 
+## Autentikasi dan multi-user
+
+Pendaftaran publik membuat akun dengan role `warga`; akun staf dibuat melalui
+seed atau nantinya dikelola admin. Kata sandi disimpan sebagai hash Werkzeug,
+formulir POST dilindungi CSRF, dan akses role diperiksa di server. Request
+mengambil data akun dari sesi dan database, bukan state antrean global dalam
+memori. Operasi antrean lintas petugas harus dilakukan dalam transaksi database
+dengan penguncian baris (`SELECT ... FOR UPDATE`) agar satu sampel tidak diambil
+dua kali; SQLite menserialisasi penulisan, sedangkan locking baris berlaku pada
+MySQL.
+
 ## Akun demo
 
 Semua akun demo memakai kata sandi `AquaTraceDemo123!`:

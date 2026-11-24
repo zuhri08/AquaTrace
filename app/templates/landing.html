@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}AquaTrace — kualitas air yang terlacak{% endblock %}
+{% block content %}
+<section class="hero">
+  <p class="eyebrow">DATA SIMULASI · SDG 6</p>
+  <h1>Kenali kualitas air.<br>Telusuri dampaknya.</h1>
+  <p class="lead">AquaTrace membantu warga melaporkan sumber air dan membantu petugas menelusuri hasil pengujian dengan transparan.</p>
+  <div class="actions">
+    <a class="button button-dark" href="{{ url_for('auth.register') }}">Buat akun warga</a>
+    <a class="button button-outline" href="{{ url_for('auth.login') }}">Masuk</a>
+  </div>
+</section>
+{% endblock %}

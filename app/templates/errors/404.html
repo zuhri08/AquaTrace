@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Halaman tidak ditemukan — AquaTrace{% endblock %}
+{% block content %}
+<section class="error-card">
+  <p class="eyebrow">404 · TIDAK DITEMUKAN</p>
+  <h1>Halaman yang dicari tidak ditemukan.</h1>
+  <a class="button button-dark" href="{{ url_for('pages.landing') }}">Kembali ke beranda</a>
+</section>
+{% endblock %}
