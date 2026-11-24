@@ -50,3 +50,21 @@ menyediakan implementasi atau data proyek.
   statusnya diubah dan transaksi di-commit.
 - Struktur antrean dibangun ulang dari database per request; instance Queue
   bukan sumber kebenaran. Role admin dapat membuka endpoint operasional petugas.
+
+## Fase 5
+
+- `app/config/thresholds.py` memuat nilai demonstrasi saja dan menandainya
+  `CONTOH, ISI DARI DOKUMEN RESMI`. Nilai ini bukan hasil verifikasi regulasi;
+  `REGULATION_SOURCE` sengaja kosong dan UI memberi label nilai contoh.
+- Pohon screening contoh menggolongkan pH di luar rentang contoh sebagai
+  `TIDAK_LAYAK`; kekeruhan atau TDS di atas contoh sebagai `WASPADA`; nilai
+  lainnya sebagai `BERSIH`. Ini hanya contoh alur keputusan, bukan keputusan
+  kepatuhan terhadap baku mutu resmi.
+- Rentang fisik untuk validasi masukan pH, kekeruhan, dan TDS mengikuti batas
+  validasi simulasi PRD dan tidak dipakai sebagai ambang kelayakan.
+- Pengukuran wizard disimpan sementara di sesi, lalu seluruh hasil, perubahan
+  status sampel/sumber, dan aksi undo dipersistenkan dalam satu transaksi DB.
+- Penyimpanan hasil memakai conditional update pada sampel `diproses` di SQLite
+  dan `SELECT FOR UPDATE` di MySQL. Unique constraint satu hasil per sampel
+  menjadi perlindungan tambahan; undo menghapus hasil itu sebelum sampel
+  dikembalikan ke antrean.

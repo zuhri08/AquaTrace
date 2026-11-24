@@ -70,6 +70,9 @@ Seluruh data yang di-seed adalah data simulasi tanpa identitas atau alamat asli.
 Angka pengukuran seed bukan klaim baku mutu. Ambang resmi belum diisi dan harus
 diverifikasi manusia dari regulasi yang berlaku sebelum dipakai untuk keputusan.
 Sistem ditujukan untuk screening, bukan pengganti pengujian laboratorium lengkap.
+`app/config/thresholds.py` berisi nilai contoh untuk mendemonstrasikan cabang
+pohon keputusan. Nilai tersebut bukan angka baku mutu resmi dan ditandai
+`CONTOH, ISI DARI DOKUMEN RESMI`.
 
 ## Penggunaan AI
 

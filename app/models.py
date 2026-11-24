@@ -146,6 +146,7 @@ class TestResult(db.Model):
             "vonis IN ('BERSIH', 'WASPADA', 'TIDAK_LAYAK')",
             name="ck_results_vonis",
         ),
+        UniqueConstraint("sample_id", name="uq_test_results_sample"),
         Index("ix_test_results_source_created", "source_id", "created_at"),
         Index("ix_test_results_sample", "sample_id"),
     )
