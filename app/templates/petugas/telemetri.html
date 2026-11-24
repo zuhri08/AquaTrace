@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Log telemetri IoT — AquaTrace{% endblock %}
+{% block content %}
+<section class="dashboard"><p class="eyebrow">PETUGAS LAB · TELEMETRI</p><h1>Log telemetri IoT</h1>
+  <div class="empty-card"><h2>Antrean FIFO · {{ queue|length }}</h2>
+    <form method="post" action="{{ url_for('iot.process_telemetry') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button button-dark" type="submit">Proses Antrean Telemetri</button></form>
+    {% for reading in queue %}<p>FRONT{% if not loop.first %} · antre{% endif %} · #{{ reading.id }} · {{ reading.device.kode }}</p>{% else %}<p>Antrean telemetri kosong.</p>{% endfor %}
+  </div>
+  <h2>Perangkat</h2>{% for device in devices %}<article class="empty-card"><p>{{ device.kode }} · {{ device.source.nama }} · {% if online(device) %}Online{% else %}Offline{% endif %} · {{ device.last_seen or "Belum ada data" }}</p>
+    {% set chart = series(device.id) %}<p>Jendela linked list ({{ chart.length() }} bacaan): {% for reading in chart.traverse() %}<span>{{ reading.ph }} / {{ reading.kekeruhan_ntu }} / {{ reading.tds_mgl }}</span>{% if not loop.last %} → {% endif %}{% endfor %}</p>
+  </article>{% endfor %}
+  <h2>Bacaan terbaru</h2>{% for reading in readings %}<article class="empty-card"><p>{{ reading.device.kode }} · {{ reading.source.nama }} · pH {{ reading.ph }} · {{ reading.kekeruhan_ntu }} NTU · {{ reading.tds_mgl }} mg/L</p><p>{{ reading.vonis or "Antri" }} · {{ reading.diterima_at }}{% if reading.vonis == "TIDAK_LAYAK" %} · Perlu verifikasi{% endif %}</p></article>{% else %}<p>Belum ada telemetri.</p>{% endfor %}
+</section>
+{% endblock %}

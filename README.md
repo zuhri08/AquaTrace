@@ -1,8 +1,8 @@
 # AquaTrace
 
-AquaTrace adalah fondasi aplikasi simulasi untuk pengujian dan pelacakan kualitas
-air. Pada tahap ini tersedia model data dan seed demo; autentikasi serta struktur
-data manual ditambahkan pada fase berikutnya.
+AquaTrace adalah aplikasi simulasi untuk pelaporan sumber, antrean dan diagnosis
+sampel, riwayat uji, pelacakan jaringan air, dan pemantauan sensor IoT. Seluruh
+data demo adalah simulasi.
 
 ## Persyaratan
 
@@ -19,11 +19,29 @@ python -m venv .venv
 python -m pip install -r requirements.txt
 Copy-Item .env.example .env
 python seed.py
+python run.py
 pytest
 ```
 
 Ubah `SECRET_KEY` pada `.env` sebelum penggunaan selain demo lokal. Seed dapat
 dijalankan berulang kali tanpa menggandakan data.
+
+Untuk mensimulasikan sensor, gunakan contoh perintah pada
+[docs/iot/README.md](./docs/iot/README.md). Nilai ambang saat ini hanya contoh.
+
+## Fitur saat ini
+
+- Akun demo tiga role, akses role di server, dan CSRF pada form.
+- Warga dapat melaporkan sumber, mengajukan sampel, dan melihat antrean/status.
+- Petugas dapat mengambil sampel FIFO prioritas, menjalankan wizard diagnosis,
+  mengurungkan hasil, serta mengoreksi/menghapus riwayat.
+- Admin dapat melihat hitungan tercemar per wilayah dan mengelola edge jaringan.
+- IoT menerima telemetri ber-API-key, memproses antrean, membentuk sampel
+  prioritas untuk hasil sensor `TIDAK_LAYAK`, dan menyediakan simulator.
+- UI yang ada masih sederhana untuk uji fungsional; reskin lengkap, visualisasi
+  struktur data, dan halaman penuh tetap dikerjakan pada Fase 9.
+
+Lihat [docs/iot/README.md](./docs/iot/README.md) untuk protokol IoT dan simulator.
 
 ## Konfigurasi MySQL
 

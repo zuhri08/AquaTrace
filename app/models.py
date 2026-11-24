@@ -234,6 +234,7 @@ class IotDevice(db.Model):
     api_key_hash = db.Column(db.String(64), nullable=False)
     aktif = db.Column(db.Boolean, nullable=False, default=True)
     last_seen = db.Column(db.DateTime)
+    last_ingested_at = db.Column(db.DateTime)
     created_at = db.Column(db.DateTime, nullable=False, default=utcnow)
 
     source = db.relationship("WaterSource", back_populates="iot_devices")
@@ -256,6 +257,9 @@ class SensorReading(db.Model):
             "vonis IS NULL OR vonis IN ('BERSIH', 'WASPADA', 'TIDAK_LAYAK')",
             name="ck_readings_vonis",
         ),
+        UniqueConstraint(
+            "device_id", "ts_sensor", name="uq_sensor_readings_device_timestamp"
+        ),
         Index("ix_sensor_readings_device_received", "device_id", "diterima_at"),
         Index("ix_sensor_readings_queue", "status", "diterima_at"),
     )
@@ -273,6 +277,7 @@ class SensorReading(db.Model):
     status = db.Column(db.String(20), nullable=False, default="antri")
     vonis = db.Column(db.String(20))
     jejak_keputusan = db.Column(db.Text)
+    ts_sensor = db.Column(db.DateTime)
     diterima_at = db.Column(db.DateTime, nullable=False, default=utcnow)
     diproses_at = db.Column(db.DateTime)
 

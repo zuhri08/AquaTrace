@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Perangkat IoT — AquaTrace{% endblock %}
+{% block content %}
+<section class="dashboard"><p class="eyebrow">ADMIN · PERANGKAT IoT</p><h1>Perangkat telemetri</h1>
+  {% if one_time_key %}<div class="empty-card"><strong>API key ditampilkan sekali. Salin sekarang:</strong><code>{{ one_time_key }}</code></div>{% endif %}
+  <div class="empty-card"><h2>Daftarkan perangkat</h2><form method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Kode <input name="kode" maxlength="80" required></label><label>Nama <input name="nama" maxlength="120" required></label>
+    <label>Sumber <select name="source_id" required>{% for source in sources %}<option value="{{ source.id }}">{{ source.nama }}</option>{% endfor %}</select></label>
+    <button class="button button-dark" type="submit">Buat perangkat</button></form></div>
+  {% for device in devices %}<article class="empty-card"><h2>{{ device.kode }} · {{ device.nama }}</h2><p>{{ device.source.nama }} · {% if online(device) %}Online{% else %}Offline{% endif %} · {{ device.last_seen or "Belum ada data" }}</p>
+    <form method="post" action="{{ url_for('iot.toggle_device', device_id=device.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button button-outline" type="submit">{% if device.aktif %}Nonaktifkan{% else %}Aktifkan{% endif %}</button></form>
+    <form method="post" action="{{ url_for('iot.remove_device', device_id=device.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button button-outline" type="submit">Hapus perangkat</button></form>
+  </article>{% else %}<p>Belum ada perangkat.</p>{% endfor %}
+</section>
+{% endblock %}

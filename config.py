@@ -17,3 +17,4 @@ class Config:
     SESSION_COOKIE_SECURE = os.getenv("SESSION_COOKIE_SECURE", "false").lower() == "true"
     MAX_CONTENT_LENGTH = 1024 * 1024
     IOT_AUTO_PROSES = os.getenv("IOT_AUTO_PROSES", "true").lower() == "true"
+    DEBUG = os.getenv("FLASK_DEBUG", "false").lower() == "true"

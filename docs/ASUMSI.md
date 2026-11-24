@@ -96,3 +96,29 @@ menyediakan implementasi atau data proyek.
 - Edge adalah berarah hulu-ke-hilir, jarak finite dan positif, tidak boleh
   menuju diri sendiri atau mengulang pasangan terarah yang sama. Validasi ada
   di service dan constraint database.
+
+## Fase 7B
+
+- `sensor_readings.ts_sensor` menyimpan timestamp perangkat opsional untuk
+  idempotensi; unique index pada `(device_id, ts_sensor)` menolak timestamp
+  ganda, sedangkan `NULL` menandakan perangkat tidak mengirim timestamp.
+  `seed.py` menambahkan kedua kolom IoT dan index secara aditif ketika seed
+  dijalankan pada database SQLite/MySQL lama.
+- Rate limit dihitung dari waktu penerimaan server, satu bacaan per 2 detik.
+  `iot_devices.last_ingested_at` adalah kolom tambahan agar pemeriksaan dan
+  reservasi rate limit atomik. SQLite memakai conditional `UPDATE ... RETURNING`
+  dan timeout penulis; MySQL mengunci baris perangkat dengan `SELECT FOR UPDATE`.
+- Status pembacaan `diproses` berarti telah dievaluasi; `diproses_at` dan vonis
+  terisi. Proses memakai Queue manual yang dibangun dari bacaan `antri` berurutan
+  waktu/id. Klaim bersyarat mencegah worker ganda memproses bacaan yang sama.
+- Perubahan status sensor dan pembuatan sampel prioritas IoT berada dalam satu
+  transaksi. Sebelum pengecekan sampel terbuka pada SQLite, penulisan sumber
+  dalam transaksi mengambil lock writer SQLite; MySQL memakai lock baris sumber.
+- API key perangkat dibuat acak, hanya hash SHA-256 disimpan, dan key plaintext
+  dikirim sekali pada response HTML pendaftaran (tidak ditaruh di cookie sesi).
+- `IOT_AUTO_PROSES` memproses antrean setelah ingest secara default; untuk demo
+  manual set `false`. Sensor dianggap offline bila bacaan terakhir lebih lama
+  dari lima menit. Nilai ini adalah batas operasional aplikasi, bukan regulasi.
+- Pembacaan sensor memakai pohon screening fase 5 dan ambang yang sama, tetap
+  bernilai contoh. Modul simulator dan contoh ESP32 mengirim data simulasi atau
+  placeholder; contoh perangkat keras secara eksplisit belum diuji.

@@ -2,6 +2,7 @@ import hashlib
 import random
 from datetime import datetime, timedelta
 
+from sqlalchemy import inspect, text
 from werkzeug.security import generate_password_hash
 
 from app import create_app, db
@@ -193,10 +194,51 @@ def seed_database():
     return {"users": len(users), "regions": len(villages) + 7, "sources": len(sources)}
 
 
+def ensure_telemetry_schema():
+    """Apply additive IoT columns/indexes when upgrading an existing demo DB."""
+    dialect = db.session.get_bind().dialect.name
+    if dialect not in {"sqlite", "mysql"}:
+        return
+    inspector = inspect(db.engine)
+    if not inspector.has_table("iot_devices") or not inspector.has_table("sensor_readings"):
+        return
+    device_columns = {column["name"] for column in inspector.get_columns("iot_devices")}
+    reading_columns = {
+        column["name"] for column in inspector.get_columns("sensor_readings")
+    }
+    with db.engine.begin() as connection:
+        if "last_ingested_at" not in device_columns:
+            connection.execute(
+                text("ALTER TABLE iot_devices ADD COLUMN last_ingested_at DATETIME")
+            )
+        if "ts_sensor" not in reading_columns:
+            connection.execute(
+                text("ALTER TABLE sensor_readings ADD COLUMN ts_sensor DATETIME")
+            )
+        indexes = {
+            index["name"] for index in inspect(db.engine).get_indexes("sensor_readings")
+        }
+        constraints = {
+            item.get("name")
+            for item in inspect(db.engine).get_unique_constraints("sensor_readings")
+        }
+        if (
+            "uq_sensor_readings_device_timestamp" not in indexes
+            and "uq_sensor_readings_device_timestamp" not in constraints
+        ):
+            connection.execute(
+                text(
+                    "CREATE UNIQUE INDEX uq_sensor_readings_device_timestamp "
+                    "ON sensor_readings (device_id, ts_sensor)"
+                )
+            )
+
+
 def main():
     app = create_app()
     with app.app_context():
         db.create_all()
+        ensure_telemetry_schema()
         seed_database()
         print("Seed selesai. Kredensial demo:")
         print("Semua role: password AquaTraceDemo123!")
