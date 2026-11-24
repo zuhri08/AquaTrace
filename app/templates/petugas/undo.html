@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Riwayat entri — AquaTrace{% endblock %}
+{% block content %}
+<section class="dashboard"><p class="eyebrow">PETUGAS LAB · UNDO STACK</p><h1>Riwayat entri</h1>
+  {% if actions %}<p>TOP · {{ actions[0].aksi }} · {{ actions[0].created_at }}</p><form method="post" action="{{ url_for('petugas.undo_entri') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button button-dark" type="submit">Urungkan entri terakhir</button></form>{% else %}<p>Tumpukan undo kosong.</p>{% endif %}
+</section>
+{% endblock %}

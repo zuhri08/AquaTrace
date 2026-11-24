@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Antrean sampel — AquaTrace{% endblock %}
+{% block content %}
+<section class="dashboard">
+  <p class="eyebrow">PETUGAS LAB · QUEUE</p><h1>Antrean sampel</h1><p>{{ total }} sampel menunggu.</p>
+  <form method="post" action="{{ url_for('petugas.proses_next') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button button-dark" type="submit">Proses Berikutnya</button></form>
+  <h2>Prioritas · FRONT</h2>{% for sample in priority_samples %}<p>Sampel #{{ sample.id }} · {{ sample.source.nama }} · prioritas</p>{% else %}<p>Tidak ada sampel prioritas.</p>{% endfor %}
+  <h2>Reguler</h2>{% for sample in regular_samples %}<p>Sampel #{{ sample.id }} · {{ sample.source.nama }}</p>{% else %}<p>Tidak ada sampel reguler.</p>{% endfor %}
+</section>
+{% endblock %}

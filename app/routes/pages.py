@@ -10,12 +10,6 @@ def landing():
     return render_template("landing.html")
 
 
-@pages_bp.get("/warga/dashboard")
-@role_required("warga")
-def warga_dashboard():
-    return render_template("dashboard.html", dashboard_role="Warga")
-
-
 @pages_bp.get("/petugas/dashboard")
 @role_required("petugas_lab", "admin")
 def petugas_dashboard():

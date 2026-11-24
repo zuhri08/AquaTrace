@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Status sampel — AquaTrace{% endblock %}
+{% block content %}
+<section class="dashboard">
+  <p class="eyebrow">WARGA · STATUS</p><h1>Sampel #{{ sample.id }}</h1>
+  <div class="empty-card"><p>Sumber: {{ sample.source.nama }}</p><p>Status: {{ sample.status }}</p>
+  {% if sample.status == "menunggu" %}<p>Posisi antrean: {{ position }}</p>{% elif sample.status == "diproses" %}<p>Sampel sedang diproses petugas.</p>{% else %}<p>Pengujian selesai.</p>{% endif %}</div>
+</section>
+{% endblock %}

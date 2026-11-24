@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Ajukan sampel — AquaTrace{% endblock %}
+{% block content %}
+<section class="form-card">
+  <p class="eyebrow">WARGA · PENGUJIAN</p><h1>Ajukan sampel</h1>
+  {% if sources %}
+  <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label for="source_id">Sumber air</label><select id="source_id" name="source_id" required>{% for source in sources %}<option value="{{ source.id }}">{{ source.nama }}</option>{% endfor %}</select>
+    <label><input name="prioritas" type="checkbox" value="yes"> Ada anggota keluarga sakit setelah memakai air ini</label>
+    <p class="help">Gejala sakit membuat sampel didahulukan untuk verifikasi.</p>
+    <button class="button button-dark" type="submit">Ajukan sampel</button>
+  </form>
+  {% else %}<p>Laporkan sumber air terlebih dahulu sebelum mengajukan sampel.</p><a class="button button-dark" href="{{ url_for('warga.sumber_baru') }}">Laporkan sumber</a>{% endif %}
+</section>
+{% endblock %}

@@ -36,3 +36,17 @@ menyediakan implementasi atau data proyek.
 - Node keputusan memakai kondisi biner `feature/operator/threshold` dengan dua
   cabang dan daun yang memiliki vonis. Evaluasi mengembalikan jejak kondisi;
   konfigurasi ambang untuk produk akan ditambahkan pada fase diagnosis.
+
+## Fase 4
+
+- SQLite tidak menyediakan `SELECT FOR UPDATE`. Klaim sampel menggunakan satu
+  pernyataan `UPDATE ... WHERE id = (SELECT ... ORDER BY ... LIMIT 1) AND
+  status='menunggu' RETURNING id`; pemilihan dan perubahan status terjadi atomik
+  di satu statement. Penulis SQLite diserialisasi dan `busy_timeout=5000`
+  memberi waktu menunggu lock. Predicate status mencegah klaim ulang. Tes
+  paralel memakai koneksi/thread terpisah untuk memastikan dua petugas tidak
+  menerima ID yang sama.
+- Pada MySQL, baris kandidat dikunci memakai `SELECT ... FOR UPDATE`, lalu
+  statusnya diubah dan transaksi di-commit.
+- Struktur antrean dibangun ulang dari database per request; instance Queue
+  bukan sumber kebenaran. Role admin dapat membuka endpoint operasional petugas.

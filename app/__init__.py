@@ -15,6 +15,7 @@ def _enable_sqlite_foreign_keys(connection, _):
     if connection.__class__.__module__.startswith("sqlite3"):
         cursor = connection.cursor()
         cursor.execute("PRAGMA foreign_keys=ON")
+        cursor.execute("PRAGMA busy_timeout=5000")
         cursor.close()
 
 
@@ -31,9 +32,13 @@ def create_app(test_config=None):
         from app import models  # noqa: F401
         from app.routes.auth import auth_bp
         from app.routes.pages import pages_bp
+        from app.routes.warga import warga_bp
+        from app.routes.petugas import petugas_bp
 
         app.register_blueprint(auth_bp)
         app.register_blueprint(pages_bp)
+        app.register_blueprint(warga_bp)
+        app.register_blueprint(petugas_bp)
 
     @app.before_request
     def load_logged_in_user():

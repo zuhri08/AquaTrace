@@ -39,7 +39,7 @@ def role_required(*allowed_roles):
 
 def _dashboard_for(user):
     return {
-        "warga": "pages.warga_dashboard",
+        "warga": "warga.dashboard",
         "petugas_lab": "pages.petugas_dashboard",
         "admin": "pages.admin_dashboard",
     }[user.role]
@@ -108,7 +108,7 @@ def register():
         session.clear()
         session["user_id"] = user.id
         flash("Akun berhasil dibuat.", "success")
-        return redirect(url_for("pages.warga_dashboard"))
+        return redirect(url_for("warga.dashboard"))
 
     return render_template("auth/register.html")
 
