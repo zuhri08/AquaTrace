@@ -354,7 +354,7 @@ def test_auto_process_and_public_feed_do_not_require_login(app):
     assert staff_page.status_code == 200
     series = client.get("/api/telemetry/series/1")
     assert series.status_code == 200
-    assert "series" in series.json
+    assert "series" in series.json["data"]
 
 
 def test_staff_manual_queue_processing_page(app):

@@ -164,19 +164,23 @@ def telemetry_series(device_id):
         abort(404)
     return jsonify(
         {
-            "device_id": device.id,
-            "kode": device.kode,
-            "online": device_is_online(device),
-            "series": [
-                {
-                    "id": reading.id,
-                    "ph": reading.ph,
-                    "kekeruhan_ntu": reading.kekeruhan_ntu,
-                    "tds_mgl": reading.tds_mgl,
-                    "vonis": reading.vonis,
-                    "diterima_at": reading.diterima_at.isoformat(),
-                }
-                for reading in sensor_series(device_id).traverse()
-            ],
+            "data": {
+                "device_id": device.id,
+                "kode": device.kode,
+                "online": device_is_online(device),
+                "series": [
+                    {
+                        "id": reading.id,
+                        "ph": reading.ph,
+                        "kekeruhan_ntu": reading.kekeruhan_ntu,
+                        "tds_mgl": reading.tds_mgl,
+                        "vonis": reading.vonis,
+                        "diterima_at": reading.diterima_at.isoformat(),
+                    }
+                    for reading in sensor_series(device_id).traverse()
+                ],
+            },
+            "last_operation": "LinkedList.insert_tail() -> jendela sensor",
+            "complexity": {"time": "O(n)", "space": "O(n)"},
         }
     )

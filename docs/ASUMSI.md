@@ -122,3 +122,17 @@ menyediakan implementasi atau data proyek.
 - Pembacaan sensor memakai pohon screening fase 5 dan ambang yang sama, tetap
   bernilai contoh. Modul simulator dan contoh ESP32 mengirim data simulasi atau
   placeholder; contoh perangkat keras secara eksplisit belum diuji.
+
+## Fase 8
+
+- API visualisasi menggunakan envelope `{data, last_operation, complexity}` dan
+  menyusun payload dari struktur data manual serta database, bukan array contoh.
+- Endpoint staf dibatasi `@role_required` sesuai data dan fungsi; endpoint data
+  publik terpisah hanya mengembalikan informasi sensor/jaringan yang memang
+  tampil di halaman publik, tanpa data pengaju/penguji.
+- Warga hanya menerima item antrean sampel miliknya; posisi berasal dari Queue
+  penuh di server. Endpoint stack/decision tree dibatasi ke petugas/admin dan
+  tree wilayah hanya admin.
+- Feed menautkan sampel IoT berdasarkan sumber dan waktu pembuatan setelah
+  bacaan diterima; skema yang tersedia tidak memiliki foreign key langsung dari
+  bacaan ke sampel pemicu.

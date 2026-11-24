@@ -32,6 +32,7 @@ def create_app(test_config=None):
         from app import models  # noqa: F401
         from app.routes.auth import auth_bp
         from app.routes.admin import admin_bp
+        from app.routes.api import api_bp
         from app.routes.iot import iot_bp
         from app.routes.pages import pages_bp
         from app.routes.warga import warga_bp
@@ -39,6 +40,7 @@ def create_app(test_config=None):
 
         app.register_blueprint(auth_bp)
         app.register_blueprint(admin_bp)
+        app.register_blueprint(api_bp)
         app.register_blueprint(iot_bp)
         app.register_blueprint(pages_bp)
         app.register_blueprint(warga_bp)
