@@ -1,27 +1,32 @@
-{% extends "base.html" %}
+{% extends "layout_staf.html" %}
 {% block title %}Diagnosis sampel — AquaTrace{% endblock %}
 {% block content %}
 <section class="dashboard">
   <p class="eyebrow">PETUGAS LAB · DIAGNOSIS</p><h1>Sampel #{{ sample.id }}</h1>
   <p>Screening awal saja; hasil bukan pengganti uji laboratorium lengkap.</p>
   {% if thresholds_example %}<p class="message message-info">Ambang pohon keputusan adalah nilai contoh, bukan baku mutu resmi.</p>{% endif %}
-  <div class="empty-card"><strong>Jejak pengukuran (Stack · TOP)</strong>
-    {% for item in trail %}<p>{{ item.field }}: {{ item.value }}</p>{% else %}<p>Belum ada pengukuran.</p>{% endfor %}
-  </div>
+  {% set steps = ["pH", "Kekeruhan", "TDS", "Tinjau"] %}
+  {% set current_step = 0 %}
+  {% if step == "kekeruhan_ntu" %}{% set current_step = 1 %}{% elif step == "tds_mgl" %}{% set current_step = 2 %}{% elif step == "review" %}{% set current_step = 3 %}{% endif %}
+  {% include "partials/_stepper.html" %}
+  {% set visual_key = "diagnosis-stack-" ~ sample.id %}{% set visual_type = "stack" %}{% set visual_title = "Jejak pengukuran · Stack TOP" %}{% set visual_caption = "Nilai tersimpan sementara di sesi diagnosis." %}{% set visual_api_url = url_for("api.diagnosis_stack_visualization", sample_id=sample.id) %}
+  {% include "partials/_visualisasi.html" %}
   {% if step == "review" %}
-    <h2>Hasil screening: {{ verdict }}</h2>
-    {% for item in trace %}<p>{{ item }}</p>{% endfor %}
-    <form method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button button-dark" name="action" value="save" type="submit">Simpan hasil diagnosis</button></form>
-    {% if trail %}<form method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button button-outline" name="action" value="back" type="submit">Kembali</button></form>{% endif %}
+    <h2>Hasil screening: {{ verdict }}</h2>{% set status = verdict %}{% include "partials/_status_badge.html" %}
+    {% set visual_key = "diagnosis-tree-" ~ sample.id %}{% set visual_type = "decision-tree" %}{% set visual_title = "Pohon keputusan" %}{% set visual_caption = "Cabang evaluasi dan hasil dihitung dari API." %}
+    {% set visual_api_url = url_for("api.decision_tree_visualization") ~ "?ph=" ~ measurements.ph ~ "&kekeruhan_ntu=" ~ measurements.kekeruhan_ntu ~ "&tds_mgl=" ~ measurements.tds_mgl %}
+    {% include "partials/_visualisasi.html" %}
+    <form method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button button-primary" name="action" value="save" type="submit">Simpan hasil diagnosis</button></form>
+    {% if trail %}<form method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button button-secondary" name="action" value="back" type="submit">Kembali</button></form>{% endif %}
   {% else %}
     <form method="post">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <input type="hidden" name="field" value="{{ field_name }}">
       <label for="measurement">{{ field.label }}{% if field.unit %} ({{ field.unit }}){% endif %}</label>
       <input id="measurement" name="value" type="number" step="any" min="{{ field.minimum }}" max="{{ field.maximum }}" required autofocus>
-      <button class="button button-dark" name="action" value="next" type="submit">Lanjut</button>
+      <button class="button button-primary" name="action" value="next" type="submit">Lanjut</button>
     </form>
-    {% if trail %}<form method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button button-outline" name="action" value="back" type="submit">Kembali</button></form>{% endif %}
+    {% if trail %}<form method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button button-secondary" name="action" value="back" type="submit">Kembali</button></form>{% endif %}
   {% endif %}
 </section>
 {% endblock %}

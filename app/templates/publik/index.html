@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Kondisi air publik — AquaTrace{% endblock %}
+{% block content %}
+<section class="dashboard">
+  <p class="eyebrow">DATA SIMULASI · SDG 6</p>
+  <h1>Kondisi sumber air</h1>
+  <p class="lead">Ringkasan ini menampilkan data yang tersedia di AquaTrace. Status dan pengukuran adalah informasi simulasi, bukan sertifikasi kelayakan air.</p>
+  <div class="card-grid">
+    <article class="metric-card"><p class="metric-label">Sumber terdata</p><p class="metric-value">{{ source_count }}</p><p class="metric-caption">dari basis data saat ini</p></article>
+    <article class="metric-card"><p class="metric-label">Sudah memiliki hasil</p><p class="metric-value">{{ measured_count }}</p><p class="metric-caption">sumber yang pernah diuji</p></article>
+    <article class="metric-card"><p class="metric-label">Indeks hasil bersih</p><p class="metric-value">{% if clean_index is not none %}{{ clean_index }}%{% else %}—{% endif %}</p><p class="metric-caption">{% if measured_count %}{{ clean_count }} dari {{ measured_count }} sumber teruji{% else %}Belum ada hasil uji{% endif %}</p></article>
+  </div>
+  {% set visual_key = "public-network" %}{% set visual_type = "graph" %}{% set visual_title = "Peta jaringan sumber" %}{% set visual_caption = "Node dan aliran dibaca dari API publik." %}{% set visual_api_url = url_for("api.public_graph_visualization") %}
+  {% include "partials/_visualisasi.html" %}
+  {% set visual_key = "public-feed" %}{% set visual_type = "telemetry-feed" %}{% set visual_title = "Feed sensor terkini" %}{% set visual_caption = "Data ringkas perangkat tanpa informasi identitas pengguna." %}{% set visual_api_url = url_for("api.public_telemetry_visualization") %}
+  {% include "partials/_visualisasi.html" %}
+  <h2 class="telemetry-accent">Grafik sensor</h2>
+  {% for device_id in device_ids %}
+    {% set visual_key = "public-sensor-" ~ device_id %}{% set visual_type = "sparkline" %}{% set visual_title = "Sensor #" ~ device_id %}{% set visual_caption = "Jendela bacaan terbaru dari API publik." %}{% set visual_api_url = url_for("api.public_sensor_series", device_id=device_id) %}
+    {% include "partials/_visualisasi.html" %}
+  {% else %}
+    {% set empty_title = "Belum ada perangkat sensor" %}{% set empty_message = "Grafik akan tersedia setelah perangkat mengirim data." %}{% set empty_icon = "sensors_off" %}{% include "partials/_empty_state.html" %}
+  {% endfor %}
+</section>
+{% endblock %}

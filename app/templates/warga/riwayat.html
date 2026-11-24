@@ -1,7 +1,8 @@
-{% extends "base.html" %}
+{% extends "layout_warga.html" %}
 {% block title %}Riwayat kualitas air — AquaTrace{% endblock %}
 {% block content %}
 <section class="dashboard"><p class="eyebrow">RIWAYAT SUMBER</p><h1>{{ source.nama }}</h1>
-  {% for result in entries %}<article class="empty-card"><h2>{{ result.vonis }}</h2><p>pH {{ result.ph }} · Kekeruhan {{ result.kekeruhan_ntu }} NTU · TDS {{ result.tds_mgl }} mg/L</p><p>{{ result.jejak_keputusan }}</p></article>{% else %}<p>Belum ada hasil pengujian.</p>{% endfor %}
+  {% set visual_key = "citizen-source-history-" ~ source.id %}{% set visual_type = "linked-list" %}{% set visual_title = "Hasil uji berurutan" %}{% set visual_caption = "HEAD ke TAIL mengikuti kronologi dari API." %}{% set visual_api_url = url_for("api.linked_list_visualization", source_id=source.id) %}
+  {% include "partials/_visualisasi.html" %}
 </section>
 {% endblock %}

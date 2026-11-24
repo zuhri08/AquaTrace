@@ -2,7 +2,14 @@
 {% block title %}Telemetri publik — AquaTrace{% endblock %}
 {% block content %}
 <section class="dashboard"><p class="eyebrow">DATA SIMULASI</p><h1>Feed telemetri</h1>
-  <h2>Perangkat sensor</h2>{% for device in devices %}<p>{{ device.kode }} · {{ device.source.nama }} · {% if online(device) %}Online{% else %}Offline{% endif %}</p>{% else %}<p>Belum ada perangkat.</p>{% endfor %}
-  <h2>Bacaan terbaru</h2>{% for reading in readings %}<article class="empty-card"><p>{{ reading.device.kode }} · {{ reading.source.nama }}</p><p>pH {{ reading.ph }} · {{ reading.kekeruhan_ntu }} NTU · {{ reading.tds_mgl }} mg/L</p><p>{{ reading.vonis or "Antri" }} · {{ reading.diterima_at }}</p></article>{% else %}<p>Belum ada data sensor.</p>{% endfor %}
+  {% set visual_key = "public-telemetry-feed" %}{% set visual_type = "telemetry-feed" %}{% set visual_title = "Bacaan terbaru" %}{% set visual_caption = "Feed tanpa informasi identitas pengguna." %}{% set visual_api_url = url_for("api.public_telemetry_visualization") %}
+  {% include "partials/_visualisasi.html" %}
+  <h2 class="telemetry-accent">Grafik sensor</h2>
+  {% for device in devices %}
+    {% set visual_key = "public-device-" ~ device.id %}{% set visual_type = "sparkline" %}{% set visual_title = device.kode ~ " · " ~ device.source.nama %}{% set visual_caption = "Jendela bacaan terbaru dari API publik." %}{% set visual_api_url = url_for("api.public_sensor_series", device_id=device.id) %}
+    {% include "partials/_visualisasi.html" %}
+  {% else %}
+    {% set empty_title = "Belum ada perangkat sensor" %}{% set empty_message = "Grafik akan tersedia setelah perangkat mengirim data." %}{% set empty_icon = "sensors_off" %}{% include "partials/_empty_state.html" %}
+  {% endfor %}
 </section>
 {% endblock %}

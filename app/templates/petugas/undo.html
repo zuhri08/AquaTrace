@@ -1,7 +1,9 @@
-{% extends "base.html" %}
+{% extends "layout_staf.html" %}
 {% block title %}Riwayat entri — AquaTrace{% endblock %}
 {% block content %}
 <section class="dashboard"><p class="eyebrow">PETUGAS LAB · UNDO STACK</p><h1>Riwayat entri</h1>
-  {% if actions %}<p>TOP · {{ actions[0].aksi }} · {{ actions[0].created_at }}</p><form method="post" action="{{ url_for('petugas.undo_entri') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button button-dark" type="submit">Urungkan entri terakhir</button></form>{% else %}<p>Tumpukan undo kosong.</p>{% endif %}
+  {% if actions %}<form method="post" action="{{ url_for('petugas.undo_entri') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button button-primary" type="submit">Urungkan entri terakhir</button></form>{% endif %}
+  {% set visual_key = "undo-stack" %}{% set visual_type = "stack" %}{% set visual_title = "Undo stack · TOP" %}{% set visual_caption = "Aksi terakhir ditampilkan pertama dari API." %}{% set visual_api_url = url_for("api.stack_visualization") %}
+  {% include "partials/_visualisasi.html" %}
 </section>
 {% endblock %}

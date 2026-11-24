@@ -1,9 +1,13 @@
-{% extends "base.html" %}
+{% extends "layout_warga.html" %}
 {% block title %}Status sampel — AquaTrace{% endblock %}
 {% block content %}
 <section class="dashboard">
   <p class="eyebrow">WARGA · STATUS</p><h1>Sampel #{{ sample.id }}</h1>
-  <div class="empty-card"><p>Sumber: {{ sample.source.nama }}</p><p>Status: {{ sample.status }}</p>
+  <div class="card"><p>Sumber: <strong>{{ sample.source.nama }}</strong></p><p>{% set status = sample.status %}{% include "partials/_status_badge.html" %}</p>
   {% if sample.status == "menunggu" %}<p>Posisi antrean: {{ position }}</p>{% elif sample.status == "diproses" %}<p>Sampel sedang diproses petugas.</p>{% else %}<p>Pengujian selesai.</p>{% endif %}</div>
+  {% set visual_key = "citizen-queue-" ~ sample.id %}{% set visual_type = "queue" %}{% set visual_title = "Posisi sampel dalam antrean" %}{% set visual_caption = "Sampel akun Anda ditampilkan sesuai posisi antrean global." %}{% set visual_api_url = url_for("api.queue_visualization") %}
+  {% include "partials/_visualisasi.html" %}
+  {% set visual_key = "citizen-history-" ~ sample.source_id %}{% set visual_type = "linked-list" %}{% set visual_title = "Riwayat sumber" %}{% set visual_caption = "Riwayat hasil pengujian disusun dari HEAD ke TAIL." %}{% set visual_api_url = url_for("api.linked_list_visualization", source_id=sample.source_id) %}
+  {% include "partials/_visualisasi.html" %}
 </section>
 {% endblock %}

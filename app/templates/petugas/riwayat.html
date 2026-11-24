@@ -1,12 +1,14 @@
-{% extends "base.html" %}
+{% extends "layout_staf.html" %}
 {% block title %}Riwayat sumber — AquaTrace{% endblock %}
 {% block content %}
 <section class="dashboard"><p class="eyebrow">PETUGAS LAB · LINKED LIST</p><h1>Riwayat sumber #{{ source_id }}</h1>
+  {% set visual_key = "source-history-" ~ source_id %}{% set visual_type = "linked-list" %}{% set visual_title = "Hasil uji berurutan" %}{% set visual_caption = "HEAD ke TAIL mengikuti kronologi dari API." %}{% set visual_api_url = url_for("api.linked_list_visualization", source_id=source_id) %}
+  {% include "partials/_visualisasi.html" %}
   {% for result in entries %}
-  <article class="empty-card"><h2>Entri #{{ result.id }} · {{ result.vonis }}</h2>
+  <article class="card"><h2>Entri #{{ result.id }} · {% set status = result.vonis %}{% include "partials/_status_badge.html" %}</h2>
     <p>pH {{ result.ph }} · Kekeruhan {{ result.kekeruhan_ntu }} NTU · TDS {{ result.tds_mgl }} mg/L</p>
     <p>{{ result.jejak_keputusan }}</p>
-    <form method="post" action="{{ url_for('petugas.hapus_riwayat', source_id=source_id, result_id=result.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button button-outline" type="submit">Hapus entri</button></form>
+    <form method="post" action="{{ url_for('petugas.hapus_riwayat', source_id=source_id, result_id=result.id) }}" data-confirm="Hapus hasil uji ini dan kembalikan sampel ke antrean?"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button button-danger" type="submit">Hapus entri</button></form>
     <details><summary>Koreksi nilai</summary><form method="post" action="{{ url_for('petugas.koreksi_riwayat', source_id=source_id, result_id=result.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <label>pH <input name="ph" type="number" step="any" min="0" max="14" value="{{ result.ph }}" required></label>
       <label>Kekeruhan (NTU) <input name="kekeruhan_ntu" type="number" step="any" min="0" max="1000" value="{{ result.kekeruhan_ntu }}" required></label>

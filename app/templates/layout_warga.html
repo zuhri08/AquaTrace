@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block app_layout %}
+<nav class="citizen-tabs" aria-label="Menu warga">
+  <a class="pill-tab {% if request.path == '/warga/dashboard' %}is-active{% endif %}" href="{{ url_for('warga.dashboard') }}">Ringkasan</a>
+  <a class="pill-tab {% if request.path.startswith('/warga/sumber') %}is-active{% endif %}" href="{{ url_for('warga.sumber_baru') }}">Sumber</a>
+  <a class="pill-tab {% if request.path.startswith('/warga/sampel') %}is-active{% endif %}" href="{{ url_for('warga.sampel_baru') }}">Sampel</a>
+  <a class="pill-tab {% if request.path == '/warga/terdekat' %}is-active{% endif %}" href="{{ url_for('pages.warga_terdekat') }}">Terdekat</a>
+</nav>
+<main id="main-content" class="page-content citizen-content">
+  {% include "partials/_toast.html" %}
+  {% block content %}{% endblock %}
+</main>
+<nav class="mobile-bottom-nav" aria-label="Navigasi warga">
+  <a href="{{ url_for('warga.dashboard') }}"><span class="material-symbols-outlined" aria-hidden="true">home</span><span>Beranda</span></a>
+  <a href="{{ url_for('warga.sumber_baru') }}"><span class="material-symbols-outlined" aria-hidden="true">water_drop</span><span>Sumber</span></a>
+  <a href="{{ url_for('warga.sampel_baru') }}"><span class="material-symbols-outlined" aria-hidden="true">science</span><span>Sampel</span></a>
+  <a href="{{ url_for('pages.warga_terdekat') }}"><span class="material-symbols-outlined" aria-hidden="true">near_me</span><span>Terdekat</span></a>
+</nav>
+{% endblock %}

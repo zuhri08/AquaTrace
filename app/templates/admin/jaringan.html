@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "layout_staf.html" %}
 {% block title %}Jaringan sumber — AquaTrace{% endblock %}
 {% block content %}
 <section class="dashboard"><p class="eyebrow">ADMIN · GRAPH</p><h1>Jaringan aliran</h1>
@@ -7,7 +7,9 @@
     <label>Ke <select name="ke_source_id" required>{% for source in sources %}<option value="{{ source.id }}">{{ source.nama }}</option>{% endfor %}</select></label>
     <label>Jarak (km) <input name="jarak_km" type="number" step="any" min="0.000001" required></label>
     <button class="button button-dark" type="submit">Tambah edge</button></form></div>
+  {% set visual_key = "network-graph" %}{% set visual_type = "graph" %}{% set visual_title = "Peta aliran sumber" %}{% set visual_caption = "Node dan edge dimuat dari API; gunakan kontrol zoom atau seret untuk menjelajah." %}{% set visual_api_url = url_for("api.graph_visualization") %}
+  {% include "partials/_visualisasi.html" %}
   <h2>Edge · arah hulu ke hilir</h2>
-  {% for edge in edges %}<article class="empty-card"><p>{{ edge.source_from.nama }} → {{ edge.source_to.nama }} · {{ edge.jarak_km }} km</p><form method="post" action="{{ url_for('admin.hapus_edge', edge_id=edge.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button button-outline" type="submit">Hapus edge</button></form></article>{% else %}<p>Belum ada edge.</p>{% endfor %}
+  {% for edge in edges %}<article class="empty-card"><p>{{ edge.source_from.nama }} → {{ edge.source_to.nama }} · {{ edge.jarak_km }} km</p><form method="post" action="{{ url_for('admin.hapus_edge', edge_id=edge.id) }}" data-confirm="Hapus koneksi aliran ini?"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button button-danger" type="submit">Hapus edge</button></form></article>{% else %}<p>Belum ada edge.</p>{% endfor %}
 </section>
 {% endblock %}

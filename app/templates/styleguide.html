@@ -1,0 +1,38 @@
+{% extends "layout_staf.html" %}
+{% block title %}Styleguide — AquaTrace{% endblock %}
+{% block content %}
+<section class="dashboard">
+  <p class="eyebrow">ADMIN · DESIGN SYSTEM</p>
+  <h1>Styleguide AquaTrace</h1>
+  <p class="lead">Komponen visual untuk dashboard dan halaman publik. Grafik di bawah membaca data melalui API aktif.</p>
+  <h2>Warna dan status</h2>
+  <div class="card-grid">
+    <article class="metric-card"><p class="metric-label">Utama</p><span class="button button-primary">Aksi utama</span><p class="muted mono">#0064E0 · Kobalt</p></article>
+    <article class="metric-card"><p class="metric-label">IoT</p><span class="tag telemetry-accent">Telemetri</span><p class="muted mono">#6A3DE8 · Ungu</p></article>
+    <article class="metric-card"><p class="metric-label">Status wajib ikon dan teks</p><p>{% set status = "BERSIH" %}{% include "partials/_status_badge.html" %}</p><p>{% set status = "WASPADA" %}{% include "partials/_status_badge.html" %}</p><p>{% set status = "TIDAK_LAYAK" %}{% include "partials/_status_badge.html" %}</p></article>
+  </div>
+  <h2>Kontrol</h2>
+  <div class="actions"><button class="button button-primary" type="button">Aksi utama</button><button class="button button-secondary" type="button">Aksi sekunder</button><button class="button button-danger" type="button">Aksi berisiko</button></div>
+  <section class="panel"><h3>Tipografi</h3><p>Montserrat digunakan untuk antarmuka. <span class="mono">JetBrains Mono 123.45</span> digunakan untuk nilai sensor dan angka.</p><p class="eyebrow">LABEL SEKUNDER</p></section>
+  {% set visual_key = "styleguide-queue" %}{% set visual_type = "queue" %}{% set visual_title = "Queue" %}{% set visual_caption = "Antrean sampel live dari API." %}{% set visual_api_url = url_for("api.queue_visualization") %}
+  {% include "partials/_visualisasi.html" %}
+  {% set visual_key = "styleguide-stack" %}{% set visual_type = "stack" %}{% set visual_title = "Stack" %}{% set visual_caption = "Undo stack live dari API." %}{% set visual_api_url = url_for("api.stack_visualization") %}
+  {% include "partials/_visualisasi.html" %}
+  {% if source_id %}
+    {% set visual_key = "styleguide-linked-list" %}{% set visual_type = "linked-list" %}{% set visual_title = "Linked List" %}{% set visual_caption = "HEAD, node, dan TAIL dari API." %}{% set visual_api_url = url_for("api.linked_list_visualization", source_id=source_id) %}
+    {% include "partials/_visualisasi.html" %}
+  {% endif %}
+  {% set visual_key = "styleguide-decision-tree" %}{% set visual_type = "decision-tree" %}{% set visual_title = "Decision Tree" %}{% set visual_caption = "Cabang dan nilai contoh berasal dari API." %}{% set visual_api_url = url_for("api.decision_tree_visualization") %}
+  {% include "partials/_visualisasi.html" %}
+  {% set visual_key = "styleguide-region-tree" %}{% set visual_type = "region-tree" %}{% set visual_title = "Region Tree" %}{% set visual_caption = "Hierarki wilayah aktual dari API." %}{% set visual_api_url = url_for("api.region_tree_visualization") %}
+  {% include "partials/_visualisasi.html" %}
+  {% set visual_key = "styleguide-graph" %}{% set visual_type = "graph" %}{% set visual_title = "Graph" %}{% set visual_caption = "Node dan edge aktual dari API; pan dan zoom tersedia." %}{% set visual_api_url = url_for("api.graph_visualization") %}
+  {% include "partials/_visualisasi.html" %}
+  {% set visual_key = "styleguide-feed" %}{% set visual_type = "telemetry-feed" %}{% set visual_title = "Telemetry Feed" %}{% set visual_caption = "Bacaan sensor terbaru dari API." %}{% set visual_api_url = url_for("api.telemetry_latest_visualization") %}
+  {% include "partials/_visualisasi.html" %}
+  {% if device_id %}
+    {% set visual_key = "styleguide-sparkline" %}{% set visual_type = "sparkline" %}{% set visual_title = "Sensor Sparkline" %}{% set visual_caption = "Grafik sensor dari linked list di API." %}{% set visual_api_url = url_for("iot.telemetry_series", device_id=device_id) %}
+    {% include "partials/_visualisasi.html" %}
+  {% endif %}
+</section>
+{% endblock %}

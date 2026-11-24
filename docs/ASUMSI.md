@@ -136,3 +136,30 @@ menyediakan implementasi atau data proyek.
 - Feed menautkan sampel IoT berdasarkan sumber dan waktu pembuatan setelah
   bacaan diterima; skema yang tersedia tidak memiliki foreign key langsung dari
   bacaan ke sampel pemicu.
+
+## Fase 9
+
+- Halaman `/publik` dan endpoint `/api/public/...` hanya menampilkan ringkasan,
+  jaringan, kode perangkat, bacaan, status, dan waktu; identitas pengguna tidak
+  ikut ditampilkan. Statistik halaman dihitung dari baris sumber yang ada.
+- `/styleguide` hanya dapat diakses role `admin`, agar seluruh contoh visual
+  memakai endpoint API yang memang mensyaratkan role staf/admin.
+- Visualisasi utama dirender dari envelope API. Nilai status/hasil yang sudah
+  menjadi bagian alur kerja tetap dapat ditampilkan server-side sebagai teks;
+  mode tanpa JavaScript pada dashboard wilayah juga memiliki fallback berbasis
+  data database.
+- Grafik sensor memakai urutan sampel dari API dan skala otomatis berdasarkan
+  rentang nilai yang diterima; tidak ada nilai ambang resmi atau garis baku
+  mutu yang ditambahkan.
+- Brief `AQUATRACE_PROMPT_DESAIN_META.md` tidak tersedia sebagai file di
+  workspace, tetapi arahan visual yang diberikan pengguna diterapkan:
+  Montserrat, JetBrains Mono untuk angka, Material Symbols Outlined, tombol
+  pil, kartu datar membulat, fokus keyboard, ikon dan teks untuk status,
+  kobalt sebagai aksi utama, serta ungu khusus telemetri. Nilai warna dan
+  perhitungan kontras didokumentasikan di `docs/desain/design-system.md`.
+- Berkas tata letak referensi `docs/desain/referensi/index.html` tidak tersedia.
+  UI memakai kerangka responsif staf/sidebar dan warga/navigasi bawah; struktur
+  ini adalah adaptasi baru, bukan klaim menyalin tata letak referensi.
+- Sumber font, ikon, dan Tailwind dimuat dari CDN eksternal; saat offline
+  browser menggunakan fallback font dan CSS lokal, tetapi utility Tailwind,
+  font, dan ikon eksternal tidak dijamin tersedia.

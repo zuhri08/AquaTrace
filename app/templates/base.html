@@ -4,39 +4,58 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="AquaTrace — sistem pengujian dan pelacakan kualitas air.">
+  <meta name="theme-color" content="#ffffff">
   <title>{% block title %}AquaTrace{% endblock %}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Montserrat:wght@300;400;500;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,200..700,0..1,-50..200" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/aquatrace.css') }}">
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="{{ url_for('static', filename='js/tailwind-config.js') }}"></script>
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Lewati ke konten utama</a>
   <header class="topbar">
-    <a class="brand" href="{{ url_for('pages.landing') }}">AquaTrace</a>
-    <nav aria-label="Navigasi utama">
+    <div class="topbar-brand">
+      {% if current_user and current_user.role in ("petugas_lab", "admin") %}
+      <button class="icon-button menu-toggle" type="button" aria-label="Buka navigasi" aria-expanded="false" aria-controls="staff-navigation">
+        <span class="material-symbols-outlined" aria-hidden="true">menu</span>
+      </button>
+      {% endif %}
+      <a class="brand" href="{{ url_for('pages.landing') }}" aria-label="AquaTrace, beranda">
+        <span class="brand-mark material-symbols-outlined" aria-hidden="true">water_drop</span>
+        <span>AquaTrace</span>
+      </a>
+      <span class="sdg-chip">SDG 6 · Air Bersih</span>
+    </div>
+    <nav class="topbar-actions" aria-label="Akun dan navigasi">
+      <a class="pill-tab {% if request.path.startswith('/publik') %}is-active{% endif %}" href="{{ url_for('pages.publik') }}">Publik</a>
       {% if current_user %}
-        <span class="nav-label">{{ current_user.nama }}</span>
+        <span class="account-name">{{ current_user.nama }}</span>
         <form action="{{ url_for('auth.logout') }}" method="post" class="inline-form">
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-          <button class="button button-outline" type="submit">Keluar</button>
+          <button class="button button-secondary" type="submit">Keluar</button>
         </form>
       {% else %}
-        <a class="nav-link" href="{{ url_for('auth.login') }}">Masuk</a>
-        <a class="button button-dark" href="{{ url_for('auth.register') }}">Daftar</a>
+        <a class="pill-tab" href="{{ url_for('auth.login') }}">Masuk</a>
+        <a class="button button-primary" href="{{ url_for('auth.register') }}">Daftar</a>
       {% endif %}
     </nav>
   </header>
-  <main class="page">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <section class="messages" aria-label="Pesan">
-          {% for category, message in messages %}
-            <p class="message message-{{ category }}" role="status">{{ message }}</p>
-          {% endfor %}
-        </section>
-      {% endif %}
-    {% endwith %}
+
+  {% block app_layout %}
+  <main id="main-content" class="page-content">
+    {% include "partials/_toast.html" %}
     {% block content %}{% endblock %}
   </main>
+  {% endblock %}
+
+  <footer class="site-footer">
+    <span>AquaTrace · Data simulasi</span>
+    <a href="{{ url_for('pages.publik') }}">Informasi publik</a>
+  </footer>
+  {% include "partials/_modal_konfirmasi.html" %}
+  <script src="{{ url_for('static', filename='js/visualisasi.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
 </body>
 </html>

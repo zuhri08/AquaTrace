@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block app_layout %}
+<div class="staff-layout">
+  <aside class="staff-sidebar" id="staff-navigation" aria-label="Navigasi staf">
+    <p class="sidebar-kicker">{% if current_user.role == "admin" %}ADMINISTRATOR{% else %}PETUGAS LAB{% endif %}</p>
+    <nav class="staff-nav">
+      {% if current_user.role == "admin" %}
+      <a class="staff-link {% if request.path == '/admin/dashboard' %}is-active{% endif %}" href="{{ url_for('pages.admin_dashboard') }}"><span class="material-symbols-outlined" aria-hidden="true">space_dashboard</span>Dashboard wilayah</a>
+      <a class="staff-link {% if request.path.startswith('/admin/jaringan') %}is-active{% endif %}" href="{{ url_for('admin.jaringan') }}"><span class="material-symbols-outlined" aria-hidden="true">hub</span>Jaringan</a>
+      <a class="staff-link {% if request.path.startswith('/admin/telemetri/perangkat') %}is-active{% endif %}" href="{{ url_for('iot.devices') }}"><span class="material-symbols-outlined" aria-hidden="true">sensors</span>Perangkat IoT</a>
+      {% else %}
+      <a class="staff-link {% if request.path == '/petugas/dashboard' %}is-active{% endif %}" href="{{ url_for('pages.petugas_dashboard') }}"><span class="material-symbols-outlined" aria-hidden="true">space_dashboard</span>Ringkasan</a>
+      {% endif %}
+      <a class="staff-link {% if request.path.endswith('/antrean') %}is-active{% endif %}" href="{{ url_for('petugas.antrean') }}"><span class="material-symbols-outlined" aria-hidden="true">low_priority</span>Antrean sampel</a>
+      <a class="staff-link {% if request.path.startswith('/petugas/telemetri') %}is-active{% endif %}" href="{{ url_for('iot.telemetry') }}"><span class="material-symbols-outlined" aria-hidden="true">sensors</span>Telemetri</a>
+      <a class="staff-link {% if request.path.startswith('/petugas/lacak-dampak') %}is-active{% endif %}" href="{{ url_for('petugas.lacak_dampak') }}"><span class="material-symbols-outlined" aria-hidden="true">route</span>Lacak dampak</a>
+      <a class="staff-link {% if request.path.startswith('/petugas/riwayat-entri') %}is-active{% endif %}" href="{{ url_for('petugas.riwayat_entri') }}"><span class="material-symbols-outlined" aria-hidden="true">undo</span>Riwayat entri</a>
+      {% if current_user.role == "admin" %}
+      <a class="staff-link {% if request.path == '/styleguide' %}is-active{% endif %}" href="{{ url_for('pages.styleguide') }}"><span class="material-symbols-outlined" aria-hidden="true">palette</span>Styleguide</a>
+      {% endif %}
+    </nav>
+  </aside>
+  <main id="main-content" class="staff-main">
+    {% include "partials/_toast.html" %}
+    {% block content %}{% endblock %}
+  </main>
+</div>
+<button class="sidebar-scrim" type="button" aria-label="Tutup navigasi" hidden></button>
+{% endblock %}

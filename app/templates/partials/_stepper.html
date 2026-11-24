@@ -1,0 +1,8 @@
+<ol class="stepper" aria-label="Langkah diagnosis">
+  {% for step in steps %}
+  <li class="stepper-item {% if loop.index0 < current_step %}is-complete{% elif loop.index0 == current_step %}is-current{% endif %}" {% if loop.index0 == current_step %}aria-current="step"{% endif %}>
+    <span class="stepper-number" aria-hidden="true">{% if loop.index0 < current_step %}✓{% else %}{{ loop.index }}{% endif %}</span>
+    <span>{{ step }}</span>
+  </li>
+  {% endfor %}
+</ol>

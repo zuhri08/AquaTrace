@@ -1,4 +1,4 @@
-from flask import Blueprint, abort, g, jsonify, request
+from flask import Blueprint, abort, g, jsonify, request, session
 
 from app import db
 from app.config import thresholds
@@ -11,7 +11,11 @@ from app.models import (
 )
 from app.routes.auth import role_required
 from app.services.antrean import build_sample_queue
-from app.services.diagnosis import build_decision_tree, evaluate_measurements
+from app.services.diagnosis import (
+    build_decision_tree,
+    build_diagnosis_trail,
+    evaluate_measurements,
+)
 from app.services.jaringan import (
     build_source_graph,
     nearest_clean_source,
@@ -117,6 +121,27 @@ def stack_visualization():
     return _response(
         {"items": items, "top": items[0] if items else None, "size": len(items)},
         f"UndoStack per user -> {len(items)} aksi",
+        "O(n)",
+        "O(n)",
+    )
+
+
+@api_bp.get("/stack/diagnosis/<int:sample_id>")
+@role_required("petugas_lab", "admin")
+def diagnosis_stack_visualization(sample_id):
+    sample = db.session.get(Sample, sample_id)
+    if sample is None:
+        abort(404)
+    measurements = session.get(f"diagnosis:{sample.id}", {})
+    stack = build_diagnosis_trail(measurements)
+    items = stack.to_list()
+    return _response(
+        {
+            "items": items,
+            "top": items[0] if items else None,
+            "size": len(items),
+        },
+        f"DiagnosisTrail -> {len(items)} pengukuran",
         "O(n)",
         "O(n)",
     )

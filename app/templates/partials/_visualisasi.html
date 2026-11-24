@@ -1,0 +1,15 @@
+<section class="visual-card" aria-labelledby="{{ visual_key }}-title" data-visual="{{ visual_type }}" data-api-url="{{ visual_api_url }}" data-metadata-key="{{ visual_key }}" data-visual-id="{{ visual_key }}">
+  <div class="visual-heading">
+    <div>
+      <h2 id="{{ visual_key }}-title">{{ visual_title }}</h2>
+      {% if visual_caption %}<p class="visual-caption">{{ visual_caption }}</p>{% endif %}
+    </div>
+  </div>
+  <div class="visual-content" aria-live="polite" aria-busy="true">
+    <div class="visual-loading" role="status">Memuat data visualisasi…</div>
+  </div>
+  {% if visual_metadata|default(true) %}
+    {% set panel_key = visual_key %}
+    {% include "partials/_di_balik_layar.html" %}
+  {% endif %}
+</section>

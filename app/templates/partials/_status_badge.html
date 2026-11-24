@@ -1,0 +1,18 @@
+{% set status_value = status|default("netral") %}
+{% set status_config = {
+  "BERSIH": {"label": "Bersih", "icon": "check_circle", "class": "status-clean"},
+  "WASPADA": {"label": "Waspada", "icon": "warning", "class": "status-warning"},
+  "TIDAK_LAYAK": {"label": "Tidak layak", "icon": "cancel", "class": "status-critical"},
+  "belum_diuji": {"label": "Belum diuji", "icon": "pending", "class": "status-neutral"},
+  "belum_ada": {"label": "Belum ada data", "icon": "sensors_off", "class": "status-neutral"},
+  "menunggu": {"label": "Menunggu", "icon": "schedule", "class": "status-neutral"},
+  "antri": {"label": "Dalam antrean", "icon": "schedule", "class": "status-neutral"},
+  "diproses": {"label": "Diproses", "icon": "progress_activity", "class": "status-info"},
+  "selesai": {"label": "Selesai", "icon": "task_alt", "class": "status-clean"},
+  "online": {"label": "Online", "icon": "sensors", "class": "status-clean"},
+  "offline": {"label": "Offline", "icon": "sensors_off", "class": "status-neutral"}
+} %}
+{% set badge = status_config.get(status_value, {"label": status_value|replace("_", " ")|capitalize, "icon": "info", "class": "status-neutral"}) %}
+<span class="status-badge {{ badge.class }}" aria-label="Status: {{ badge.label }}">
+  <span class="material-symbols-outlined" aria-hidden="true">{{ badge.icon }}</span>{{ badge.label }}
+</span>

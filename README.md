@@ -38,10 +38,23 @@ Untuk mensimulasikan sensor, gunakan contoh perintah pada
 - Admin dapat melihat hitungan tercemar per wilayah dan mengelola edge jaringan.
 - IoT menerima telemetri ber-API-key, memproses antrean, membentuk sampel
   prioritas untuk hasil sensor `TIDAK_LAYAK`, dan menyediakan simulator.
-- UI yang ada masih sederhana untuk uji fungsional; reskin lengkap, visualisasi
-  struktur data, dan halaman penuh tetap dikerjakan pada Fase 9.
+- UI responsif tersedia untuk warga, petugas, admin, dan publik; visualisasi
+  struktur data mengambil payload dari API role-aware.
+- `/publik` menampilkan ringkasan terbatas data publik; `/styleguide` hanya
+  tersedia bagi admin.
 
 Lihat [docs/iot/README.md](./docs/iot/README.md) untuk protokol IoT dan simulator.
+Lihat [docs/desain/design-system.md](./docs/desain/design-system.md) untuk
+token visual, komponen, dan pedoman aksesibilitas.
+
+## Kredit desain visual
+
+Arahan visual mengikuti brief proyek `AQUATRACE_PROMPT_DESAIN_META.md` yang
+diberikan pengguna; file brief tersebut tidak disertakan di repositori ini.
+Pemetaan implementasi dan batasan tata letak dicatat dalam
+`docs/desain/design-system.md`. Montserrat, JetBrains Mono, dan Material Symbols
+Outlines dimuat melalui Google Fonts; konfigurasi Tailwind memakai CDN v3.4.17.
+Koneksi eksternal diperlukan untuk font, ikon, dan utility Tailwind dari CDN.
 
 ## Konfigurasi MySQL
 

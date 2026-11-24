@@ -1,0 +1,8 @@
+<section class="empty-state" aria-labelledby="empty-title">
+  <span class="material-symbols-outlined empty-icon" aria-hidden="true">{{ empty_icon|default("water_drop") }}</span>
+  <h2 id="empty-title">{{ empty_title|default("Belum ada data") }}</h2>
+  <p>{{ empty_message|default("Data akan muncul setelah ada aktivitas.") }}</p>
+  {% if empty_url is defined and empty_url %}
+  <a class="button button-primary" href="{{ empty_url }}">{{ empty_action|default("Lanjutkan") }}</a>
+  {% endif %}
+</section>
