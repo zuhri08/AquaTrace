@@ -1,5 +1,27 @@
 {% extends "base.html" %}
 {% block title %}Diagnosis sampel — AquaTrace{% endblock %}
 {% block content %}
-<section class="dashboard"><p class="eyebrow">PETUGAS LAB · DIAGNOSIS</p><h1>Sampel #{{ sample.id }}</h1><p>Diagnosis lengkap tersedia setelah konfigurasi ambang pada fase berikutnya.</p><p>Data screening bukan pengganti uji laboratorium lengkap.</p></section>
+<section class="dashboard">
+  <p class="eyebrow">PETUGAS LAB · DIAGNOSIS</p><h1>Sampel #{{ sample.id }}</h1>
+  <p>Screening awal saja; hasil bukan pengganti uji laboratorium lengkap.</p>
+  {% if thresholds_example %}<p class="message message-info">Ambang pohon keputusan adalah nilai contoh, bukan baku mutu resmi.</p>{% endif %}
+  <div class="empty-card"><strong>Jejak pengukuran (Stack · TOP)</strong>
+    {% for item in trail %}<p>{{ item.field }}: {{ item.value }}</p>{% else %}<p>Belum ada pengukuran.</p>{% endfor %}
+  </div>
+  {% if step == "review" %}
+    <h2>Hasil screening: {{ verdict }}</h2>
+    {% for item in trace %}<p>{{ item }}</p>{% endfor %}
+    <form method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button button-dark" name="action" value="save" type="submit">Simpan hasil diagnosis</button></form>
+    {% if trail %}<form method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button button-outline" name="action" value="back" type="submit">Kembali</button></form>{% endif %}
+  {% else %}
+    <form method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <input type="hidden" name="field" value="{{ field_name }}">
+      <label for="measurement">{{ field.label }}{% if field.unit %} ({{ field.unit }}){% endif %}</label>
+      <input id="measurement" name="value" type="number" step="any" min="{{ field.minimum }}" max="{{ field.maximum }}" required autofocus>
+      <button class="button button-dark" name="action" value="next" type="submit">Lanjut</button>
+    </form>
+    {% if trail %}<form method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button button-outline" name="action" value="back" type="submit">Kembali</button></form>{% endif %}
+  {% endif %}
+</section>
 {% endblock %}
