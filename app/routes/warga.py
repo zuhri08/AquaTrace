@@ -1,9 +1,10 @@
-from flask import Blueprint, flash, g, redirect, render_template, request, url_for
+from flask import abort, Blueprint, flash, g, redirect, render_template, request, url_for
 
 from app import db
 from app.models import Region, Sample, WaterSource
 from app.routes.auth import role_required
 from app.services.antrean import queue_position, submit_sample
+from app.services.riwayat import build_source_history
 
 warga_bp = Blueprint("warga", __name__, url_prefix="/warga")
 
@@ -97,4 +98,17 @@ def sampel_detail(sample_id):
         "warga/sampel_detail.html",
         sample=sample,
         position=queue_position(sample.id),
+    )
+
+
+@warga_bp.get("/sumber/<int:source_id>/riwayat")
+@role_required("warga")
+def riwayat_sumber(source_id):
+    source = db.session.get(WaterSource, source_id)
+    if source is None:
+        abort(404)
+    return render_template(
+        "warga/riwayat.html",
+        source=source,
+        entries=build_source_history(source_id).traverse(),
     )

@@ -1,6 +1,7 @@
-from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for
+from flask import abort, Blueprint, flash, g, redirect, render_template, request, session, url_for
 
-from app.models import Sample
+from app import db
+from app.models import Sample, WaterSource
 from app.routes.auth import role_required
 from app.services.antrean import build_sample_queue, process_next_sample
 from app.services.diagnosis import (
@@ -9,6 +10,11 @@ from app.services.diagnosis import (
     build_diagnosis_trail,
     save_result,
     undo_latest_result,
+)
+from app.services.riwayat import (
+    build_source_history,
+    correct_history_entry,
+    delete_history_entry,
 )
 from app.services.undo import build_undo_stack
 
@@ -130,3 +136,45 @@ def undo_entri():
         return redirect(url_for("petugas.riwayat_entri"))
     flash(f"Hasil sampel #{sample.id} diurungkan; sampel kembali menunggu.", "success")
     return redirect(url_for("petugas.riwayat_entri"))
+
+
+@petugas_bp.get("/sumber/<int:source_id>/riwayat")
+@role_required("petugas_lab", "admin")
+def riwayat_sumber(source_id):
+    history = build_source_history(source_id)
+    if db.session.get(WaterSource, source_id) is None:
+        abort(404)
+    return render_template(
+        "petugas/riwayat.html",
+        source_id=source_id,
+        entries=history.traverse(),
+    )
+
+
+@petugas_bp.post("/sumber/<int:source_id>/riwayat/<int:result_id>/hapus")
+@role_required("petugas_lab", "admin")
+def hapus_riwayat(source_id, result_id):
+    result = delete_history_entry(source_id, result_id)
+    if result is None:
+        abort(404)
+    flash(f"Entri #{result.id} dihapus; sampel kembali menunggu.", "success")
+    return redirect(url_for("petugas.riwayat_sumber", source_id=source_id))
+
+
+@petugas_bp.post("/sumber/<int:source_id>/riwayat/<int:result_id>/koreksi")
+@role_required("petugas_lab", "admin")
+def koreksi_riwayat(source_id, result_id):
+    measurements = {
+        "ph": request.form.get("ph"),
+        "kekeruhan_ntu": request.form.get("kekeruhan_ntu"),
+        "tds_mgl": request.form.get("tds_mgl"),
+    }
+    try:
+        result = correct_history_entry(source_id, result_id, measurements)
+    except ValueError as error:
+        flash(str(error), "error")
+        return redirect(url_for("petugas.riwayat_sumber", source_id=source_id))
+    if result is None:
+        abort(404)
+    flash(f"Entri #{result.id} berhasil dikoreksi: {result.vonis}.", "success")
+    return redirect(url_for("petugas.riwayat_sumber", source_id=source_id))

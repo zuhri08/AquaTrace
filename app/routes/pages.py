@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template
 
 from app.routes.auth import role_required
+from app.services.wilayah import region_dashboard_data
 
 pages_bp = Blueprint("pages", __name__)
 
@@ -19,4 +20,9 @@ def petugas_dashboard():
 @pages_bp.get("/admin/dashboard")
 @role_required("admin")
 def admin_dashboard():
-    return render_template("dashboard.html", dashboard_role="Administrator")
+    region_tree, contaminated_count = region_dashboard_data()
+    return render_template(
+        "admin/dashboard.html",
+        region_tree=region_tree,
+        contaminated_count=contaminated_count,
+    )

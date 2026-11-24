@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Dashboard wilayah — AquaTrace{% endblock %}
+{% block content %}
+<section class="dashboard"><p class="eyebrow">ADMIN · TREE WILAYAH</p><h1>Dashboard wilayah</h1>
+  <div class="empty-card"><strong>{{ contaminated_count }}</strong> sumber tercemar menurut hasil lab.</div>
+  {% macro region_nodes(node) %}
+    {% if node.type == "region" %}
+      <details open><summary>{{ node.nama }} · {{ node.level }} · tercemar: {{ node.jumlah_tercemar }}</summary>
+        {% for child in node.children %}{{ region_nodes(child) }}{% endfor %}
+      </details>
+    {% elif node.type == "source" %}
+      <p>{{ node.nama }} · {{ node.status }}</p>
+    {% else %}
+      {% for child in node.children %}{{ region_nodes(child) }}{% endfor %}
+    {% endif %}
+  {% endmacro %}
+  <div class="empty-card">{{ region_nodes(region_tree) }}</div>
+</section>
+{% endblock %}

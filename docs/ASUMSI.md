@@ -68,3 +68,17 @@ menyediakan implementasi atau data proyek.
   dan `SELECT FOR UPDATE` di MySQL. Unique constraint satu hasil per sampel
   menjadi perlindungan tambahan; undo menghapus hasil itu sebelum sampel
   dikembalikan ke antrean.
+
+## Fase 6
+
+- Riwayat ditampilkan dari hasil uji pada database dalam urutan waktu naik dan
+  dimuat ke `LinkedList` per request; database tetap menjadi sumber kebenaran.
+- Koreksi nilai menjalankan ulang pohon keputusan contoh dan memperbarui vonis
+  serta jejak, tanpa mengubah tanggal uji. Penghapusan hasil mengembalikan
+  sampel ke `menunggu`; status sumber lab dihitung ulang dari hasil terbaru,
+  atau `belum_diuji` bila tidak ada yang tersisa.
+- Riwayat warga dapat dibaca untuk sumber mana pun, sesuai akses riwayat publik
+  pada PRD. Halaman tidak menampilkan email atau identitas pengaju/penguji.
+- Dashboard wilayah menyimpan hitungan sumber tercemar langsung pada simpul
+  pohon; hitungan dikalkulasi rekursif dari `water_sources.status_terakhir`,
+  bukan dari indikator sensor.
