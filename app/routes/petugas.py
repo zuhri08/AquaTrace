@@ -11,6 +11,7 @@ from app.services.diagnosis import (
     save_result,
     undo_latest_result,
 )
+from app.services.jaringan import trace_downstream
 from app.services.riwayat import (
     build_source_history,
     correct_history_entry,
@@ -178,3 +179,27 @@ def koreksi_riwayat(source_id, result_id):
         abort(404)
     flash(f"Entri #{result.id} berhasil dikoreksi: {result.vonis}.", "success")
     return redirect(url_for("petugas.riwayat_sumber", source_id=source_id))
+
+
+@petugas_bp.route("/lacak-dampak", methods=["GET", "POST"])
+@role_required("petugas_lab", "admin")
+def lacak_dampak():
+    from app.models import WaterSource
+    from app.services.jaringan import network_snapshot
+
+    sources, edges = network_snapshot()
+    impacted = []
+    selected_source_id = None
+    if request.method == "POST":
+        try:
+            selected_source_id = int(request.form.get("source_id", ""))
+            impacted = trace_downstream(selected_source_id)
+        except (ValueError, LookupError) as error:
+            flash(str(error), "error")
+    return render_template(
+        "petugas/lacak_dampak.html",
+        sources=sources,
+        edges=edges,
+        impacted=impacted,
+        selected_source_id=selected_source_id,
+    )

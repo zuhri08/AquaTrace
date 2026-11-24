@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Lacak dampak — AquaTrace{% endblock %}
+{% block content %}
+<section class="dashboard"><p class="eyebrow">GRAPH · HULU KE HILIR</p><h1>Lacak dampak</h1>
+  <form method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><label for="source_id">Sumber asal</label><select id="source_id" name="source_id">{% for source in sources %}<option value="{{ source.id }}" {% if source.id == selected_source_id %}selected{% endif %}>{{ source.nama }} · {{ source.status_terakhir }}</option>{% endfor %}</select><button class="button button-dark" type="submit">Lacak dampak</button></form>
+  {% if selected_source_id %}
+  <h2>Hiliran berurut jarak</h2>
+  {% for item in impacted %}<article class="empty-card"><p>{{ item.source.nama }} · {{ item.distance_km }} km</p><p>Rute: {{ item.route|join(" → ") }}</p></article>{% else %}<p>Tidak ada jalur hilir yang dapat dicapai.</p>{% endfor %}
+  {% endif %}
+</section>
+{% endblock %}

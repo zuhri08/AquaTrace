@@ -82,3 +82,17 @@ menyediakan implementasi atau data proyek.
 - Dashboard wilayah menyimpan hitungan sumber tercemar langsung pada simpul
   pohon; hitungan dikalkulasi rekursif dari `water_sources.status_terakhir`,
   bukan dari indikator sensor.
+
+## Fase 7
+
+- Jaringan selalu dibangun ulang dari `water_sources` dan `river_edges` pada
+  request; tidak ada cache graph yang dapat menjadi stale.
+- Dampak hilir adalah semua node yang dapat dicapai melalui edge berarah, lalu
+  diurutkan menurut jarak km terpendek hasil Dijkstra; rute terpilih ditampilkan
+  bersama jarak.
+- Pencarian sumber terdekat hanya mempertimbangkan sumber yang status hasil
+  lab-nya `BERSIH`, bukan status sensor, dan harus memiliki jalur berarah dari
+  sumber asal. Jika tidak ada jalur, hasilnya kosong dengan pesan.
+- Edge adalah berarah hulu-ke-hilir, jarak finite dan positif, tidak boleh
+  menuju diri sendiri atau mengulang pasangan terarah yang sama. Validasi ada
+  di service dan constraint database.

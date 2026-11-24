@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}Sumber bersih terdekat — AquaTrace{% endblock %}
+{% block content %}
+<section class="dashboard"><p class="eyebrow">WARGA · GRAPH</p><h1>Cari sumber bersih terdekat</h1>
+  <form method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><label for="source_id">Sumber asal</label><select id="source_id" name="source_id">{% for source in sources %}<option value="{{ source.id }}">{{ source.nama }}</option>{% endfor %}</select><button class="button button-dark" type="submit">Kalkulasi rute</button></form>
+  {% if result %}<article class="empty-card"><h2>{{ result.source.nama }} · BERSIH</h2><p>Jarak: {{ result.distance_km }} km</p><p>Rute: {% for source in result.route_sources %}{{ source.nama }}{% if not loop.last %} → {% endif %}{% endfor %}</p></article>{% elif request.method == "POST" %}<p>Tidak ditemukan sumber bersih dengan jalur yang tersambung.</p>{% endif %}
+</section>
+{% endblock %}

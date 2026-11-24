@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Jaringan sumber — AquaTrace{% endblock %}
+{% block content %}
+<section class="dashboard"><p class="eyebrow">ADMIN · GRAPH</p><h1>Jaringan aliran</h1>
+  <div class="empty-card"><h2>Tambah edge berarah</h2><form method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Dari <select name="dari_source_id" required>{% for source in sources %}<option value="{{ source.id }}">{{ source.nama }}</option>{% endfor %}</select></label>
+    <label>Ke <select name="ke_source_id" required>{% for source in sources %}<option value="{{ source.id }}">{{ source.nama }}</option>{% endfor %}</select></label>
+    <label>Jarak (km) <input name="jarak_km" type="number" step="any" min="0.000001" required></label>
+    <button class="button button-dark" type="submit">Tambah edge</button></form></div>
+  <h2>Edge · arah hulu ke hilir</h2>
+  {% for edge in edges %}<article class="empty-card"><p>{{ edge.source_from.nama }} → {{ edge.source_to.nama }} · {{ edge.jarak_km }} km</p><form method="post" action="{{ url_for('admin.hapus_edge', edge_id=edge.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button button-outline" type="submit">Hapus edge</button></form></article>{% else %}<p>Belum ada edge.</p>{% endfor %}
+</section>
+{% endblock %}
