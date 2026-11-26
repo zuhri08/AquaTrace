@@ -2,9 +2,11 @@
 {% block title %}Kondisi air publik — AquaTrace{% endblock %}
 {% block content %}
 <section class="dashboard">
-  <p class="eyebrow">DATA SIMULASI · SDG 6</p>
-  <h1>Kondisi sumber air</h1>
-  <p class="lead">Ringkasan ini menampilkan data yang tersedia di AquaTrace. Status dan pengukuran adalah informasi simulasi, bukan sertifikasi kelayakan air.</p>
+  <header class="hero public-hero">
+    <p class="eyebrow">DATA SIMULASI · SDG 6</p>
+    <h1>Kondisi sumber air</h1>
+    <p class="lead">Ringkasan ini menampilkan data yang tersedia di AquaTrace. Status dan pengukuran adalah informasi simulasi, bukan sertifikasi kelayakan air.</p>
+  </header>
   <div class="card-grid">
     <article class="metric-card"><p class="metric-label">Sumber terdata</p><p class="metric-value">{{ source_count }}</p><p class="metric-caption">dari basis data saat ini</p></article>
     <article class="metric-card"><p class="metric-label">Sudah memiliki hasil</p><p class="metric-value">{{ measured_count }}</p><p class="metric-caption">sumber yang pernah diuji</p></article>

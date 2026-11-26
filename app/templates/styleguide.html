@@ -4,34 +4,114 @@
 <section class="dashboard">
   <p class="eyebrow">ADMIN · DESIGN SYSTEM</p>
   <h1>Styleguide AquaTrace</h1>
-  <p class="lead">Komponen visual untuk dashboard dan halaman publik. Grafik di bawah membaca data melalui API aktif.</p>
-  <h2>Warna dan status</h2>
-  <div class="card-grid">
-    <article class="metric-card"><p class="metric-label">Utama</p><span class="button button-primary">Aksi utama</span><p class="muted mono">#0064E0 · Kobalt</p></article>
-    <article class="metric-card"><p class="metric-label">IoT</p><span class="tag telemetry-accent">Telemetri</span><p class="muted mono">#6A3DE8 · Ungu</p></article>
-    <article class="metric-card"><p class="metric-label">Status wajib ikon dan teks</p><p>{% set status = "BERSIH" %}{% include "partials/_status_badge.html" %}</p><p>{% set status = "WASPADA" %}{% include "partials/_status_badge.html" %}</p><p>{% set status = "TIDAK_LAYAK" %}{% include "partials/_status_badge.html" %}</p></article>
+  <p class="lead">Kanvas putih, Montserrat, bentuk pil, dan satu aksi inti kobalt. Palet status dipakai hanya untuk hasil dan telemetri.</p>
+
+  <h2>Palet warna</h2>
+  <div class="token-grid">
+    {% for name, value, usage in [
+      ("Canvas", "#ffffff", "Latar utama"),
+      ("Surface soft", "#f1f4f7", "Permukaan lembut"),
+      ("Ink deep", "#0a1317", "Teks utama"),
+      ("Ink", "#1c1e21", "Teks isi"),
+      ("Charcoal", "#444950", "Tekan tombol hitam"),
+      ("Slate", "#4b4c4f", "Teks sekunder"),
+      ("Steel", "#5d6c7b", "Label navigasi"),
+      ("Stone", "#8595a4", "Dekoratif / disabled saja"),
+      ("Hairline", "#ced0d4", "Batas input"),
+      ("Hairline soft", "#dee3e9", "Batas kartu"),
+      ("Disabled text", "#bcc0c4", "Teks nonaktif"),
+      ("Ink button", "#000000", "Tombol utama umum"),
+      ("Primary", "#0064e0", "Aksi inti"),
+      ("Primary deep", "#0457cb", "Aksi inti ditekan"),
+      ("Primary soft", "#0091ff", "Aksen dekoratif"),
+      ("Focus", "#1876f2", "Cincin fokus"),
+      ("Selected border", "#0143b5", "Opsi terpilih"),
+      ("Oculus purple", "#a121ce", "IoT saja"),
+      ("Success", "#31a24c", "Status bersih"),
+      ("Warning", "#f7b928", "Status waspada"),
+      ("Attention", "#f2a918", "Perhatian"),
+      ("Critical", "#e41e3f", "Status/error"),
+      ("Critical strong", "#f0284a", "Batas error")
+    ] %}
+      <article class="token-card">
+        <span class="token-swatch" style="--swatch: {{ value }}" aria-hidden="true"></span>
+        <div><strong>{{ name }}</strong><code>{{ value }}</code><span>{{ usage }}</span></div>
+      </article>
+    {% endfor %}
   </div>
-  <h2>Kontrol</h2>
-  <div class="actions"><button class="button button-primary" type="button">Aksi utama</button><button class="button button-secondary" type="button">Aksi sekunder</button><button class="button button-danger" type="button">Aksi berisiko</button></div>
-  <section class="panel"><h3>Tipografi</h3><p>Montserrat digunakan untuk antarmuka. <span class="mono">JetBrains Mono 123.45</span> digunakan untuk nilai sensor dan angka.</p><p class="eyebrow">LABEL SEKUNDER</p></section>
-  {% set visual_key = "styleguide-queue" %}{% set visual_type = "queue" %}{% set visual_title = "Queue" %}{% set visual_caption = "Antrean sampel live dari API." %}{% set visual_api_url = url_for("api.queue_visualization") %}
+
+  <h2>Tipografi</h2>
+  <section class="panel typography-scale">
+    <p class="hero-sample">Hero 64 / 1.16 / 500</p>
+    <p class="display">Display 48 / 1.17 / 500</p>
+    <p class="heading-lg-sample">Heading large 36 / 1.28 / 500</p>
+    <p class="heading-md-sample">Editorial 28 / 1.21 / 300</p>
+    <p class="heading-sm-sample">Card 24 / 1.25 / 500</p>
+    <p class="lead">Subheading 18 / 1.44 / 300</p>
+    <p>Body 16 / 1.5 / 400 · AquaTrace membantu warga menelusuri data kualitas air.</p>
+    <p class="muted">Body small 14 / 1.43 · Label sekunder menggunakan slate.</p>
+    <p class="caption-sample">Caption 12 / 1.33 · BADGE DAN LABEL</p>
+    <p class="mono">JetBrains Mono · 7.25 pH · 12.50 NTU · 120.00 mg/L</p>
+  </section>
+
+  <h2>Bentuk dan aksi</h2>
+  <div class="actions">
+    <button class="button button-primary" type="button">Aksi umum · hitam</button>
+    <button class="button button-core" type="button">Aksi inti · kobalt</button>
+    <button class="button button-secondary" type="button">Sekunder · outline</button>
+    <button class="button button-ghost" type="button">Ghost</button>
+    <button class="button button-danger" type="button">Hapus</button>
+  </div>
+  <div class="shape-grid">
+    <article class="shape-card shape-main">Kartu utama · radius 32px</article>
+    <article class="shape-card shape-feature">Ikon / fitur · radius 16px</article>
+    <label class="shape-input">Input · radius 8px<input aria-label="Contoh input" value="44px tinggi"></label>
+  </div>
+  <p class="muted">Focus ring: 2px #1876f2, offset 2px. Target sentuh minimal 44px.</p>
+
+  <h2>Kontras warna · WCAG 2.x</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Foreground</th><th>Background</th><th>Rasio</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>Ink deep #0a1317</td><td>Success #31a24c</td><td class="mono">5.73:1</td><td>Lulus · badge bersih</td></tr>
+        <tr><td>Ink deep #0a1317</td><td>Warning #f7b928</td><td class="mono">10.66:1</td><td>Lulus · badge waspada</td></tr>
+        <tr><td>Putih #ffffff</td><td>Critical #e41e3f</td><td class="mono">4.61:1</td><td>Lulus · status kritis</td></tr>
+        <tr><td>Putih #ffffff</td><td>Success #31a24c</td><td class="mono">3.28:1</td><td>Gagal teks kecil · dihindari</td></tr>
+        <tr><td>Putih #ffffff</td><td>Warning #f7b928</td><td class="mono">1.76:1</td><td>Gagal · dihindari</td></tr>
+        <tr><td>Ink deep #0a1317</td><td>Critical soft #ffeaed</td><td class="mono">16.31:1</td><td>Lulus · error/alert</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Status · ikon, teks, warna</h2>
+  <div class="actions">
+    {% for value in ["BERSIH", "WASPADA", "TIDAK_LAYAK", "belum_diuji", "belum_ada", "menunggu", "diproses", "selesai", "online", "offline"] %}
+      {% set status = value %}{% include "partials/_status_badge.html" %}
+    {% endfor %}
+    <span class="status-badge telemetry-badge"><span class="material-symbols-outlined" aria-hidden="true">sensors</span>Dari sensor</span>
+  </div>
+  <div class="notice notice-info"><strong>Informasi:</strong> Ambang adalah nilai contoh, bukan baku mutu resmi.</div>
+
+  <h2>Visualisasi aktual dari API</h2>
+  {% set visual_key = "styleguide-queue" %}{% set visual_type = "queue" %}{% set visual_title = "Queue" %}{% set visual_caption = "Aksi inti dan lajur antrean." %}{% set visual_api_url = url_for("api.queue_visualization") %}
   {% include "partials/_visualisasi.html" %}
-  {% set visual_key = "styleguide-stack" %}{% set visual_type = "stack" %}{% set visual_title = "Stack" %}{% set visual_caption = "Undo stack live dari API." %}{% set visual_api_url = url_for("api.stack_visualization") %}
+  {% set visual_key = "styleguide-stack" %}{% set visual_type = "stack" %}{% set visual_title = "Stack" %}{% set visual_caption = "Label TOP tampil sebagai badge gelap." %}{% set visual_api_url = url_for("api.stack_visualization") %}
   {% include "partials/_visualisasi.html" %}
   {% if source_id %}
-    {% set visual_key = "styleguide-linked-list" %}{% set visual_type = "linked-list" %}{% set visual_title = "Linked List" %}{% set visual_caption = "HEAD, node, dan TAIL dari API." %}{% set visual_api_url = url_for("api.linked_list_visualization", source_id=source_id) %}
+    {% set visual_key = "styleguide-linked-list" %}{% set visual_type = "linked-list" %}{% set visual_title = "Linked List" %}{% set visual_caption = "HEAD dan TAIL memakai badge gelap." %}{% set visual_api_url = url_for("api.linked_list_visualization", source_id=source_id) %}
     {% include "partials/_visualisasi.html" %}
   {% endif %}
-  {% set visual_key = "styleguide-decision-tree" %}{% set visual_type = "decision-tree" %}{% set visual_title = "Decision Tree" %}{% set visual_caption = "Cabang dan nilai contoh berasal dari API." %}{% set visual_api_url = url_for("api.decision_tree_visualization") %}
+  {% set visual_key = "styleguide-decision-tree" %}{% set visual_type = "decision-tree" %}{% set visual_title = "Decision Tree" %}{% set visual_caption = "Struktur cabang dari API; hasil evaluasi dan jalurnya muncul pada diagnosis." %}{% set visual_api_url = url_for("api.decision_tree_visualization") %}
   {% include "partials/_visualisasi.html" %}
-  {% set visual_key = "styleguide-region-tree" %}{% set visual_type = "region-tree" %}{% set visual_title = "Region Tree" %}{% set visual_caption = "Hierarki wilayah aktual dari API." %}{% set visual_api_url = url_for("api.region_tree_visualization") %}
+  {% set visual_key = "styleguide-region-tree" %}{% set visual_type = "region-tree" %}{% set visual_title = "Region Tree" %}{% set visual_caption = "Struktur wilayah aktual dari API." %}{% set visual_api_url = url_for("api.region_tree_visualization") %}
   {% include "partials/_visualisasi.html" %}
-  {% set visual_key = "styleguide-graph" %}{% set visual_type = "graph" %}{% set visual_title = "Graph" %}{% set visual_caption = "Node dan edge aktual dari API; pan dan zoom tersedia." %}{% set visual_api_url = url_for("api.graph_visualization") %}
+  {% set visual_key = "styleguide-graph" %}{% set visual_type = "graph" %}{% set visual_title = "Graph" %}{% set visual_caption = "Node bersincin putih; jalur Dijkstra tersorot kobalt pada halaman rute." %}{% set visual_api_url = url_for("api.graph_visualization") %}
   {% include "partials/_visualisasi.html" %}
-  {% set visual_key = "styleguide-feed" %}{% set visual_type = "telemetry-feed" %}{% set visual_title = "Telemetry Feed" %}{% set visual_caption = "Bacaan sensor terbaru dari API." %}{% set visual_api_url = url_for("api.telemetry_latest_visualization") %}
+  {% set visual_key = "styleguide-feed" %}{% set visual_type = "telemetry-feed" %}{% set visual_title = "Telemetry Feed" %}{% set visual_caption = "Ungu hanya untuk penanda IoT." %}{% set visual_api_url = url_for("api.telemetry_latest_visualization") %}
   {% include "partials/_visualisasi.html" %}
   {% if device_id %}
-    {% set visual_key = "styleguide-sparkline" %}{% set visual_type = "sparkline" %}{% set visual_title = "Sensor Sparkline" %}{% set visual_caption = "Grafik sensor dari linked list di API." %}{% set visual_api_url = url_for("iot.telemetry_series", device_id=device_id) %}
+    {% set visual_key = "styleguide-sparkline" %}{% set visual_type = "sparkline" %}{% set visual_title = "Sensor Sparkline" %}{% set visual_caption = "Garis sparkline dari API dengan oculus purple." %}{% set visual_api_url = url_for("iot.telemetry_series", device_id=device_id) %}
     {% include "partials/_visualisasi.html" %}
   {% endif %}
 </section>

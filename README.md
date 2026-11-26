@@ -23,8 +23,11 @@ python run.py
 pytest
 ```
 
-Ubah `SECRET_KEY` pada `.env` sebelum penggunaan selain demo lokal. Seed dapat
-dijalankan berulang kali tanpa menggandakan data.
+**Peringatan keamanan:** `SECRET_KEY` bawaan pada `config.py` hanya untuk
+pengembangan. Sebelum deploy atau penggunaan di luar lingkungan lokal, wajib
+tetapkan `SECRET_KEY` acak dan rahasia di `.env`/secret manager; jangan gunakan
+nilai bawaan atau commit rahasia ke Git. Seed dapat dijalankan berulang kali
+tanpa menggandakan data.
 
 Untuk mensimulasikan sensor, gunakan contoh perintah pada
 [docs/iot/README.md](./docs/iot/README.md). Nilai ambang saat ini hanya contoh.
@@ -49,12 +52,15 @@ token visual, komponen, dan pedoman aksesibilitas.
 
 ## Kredit desain visual
 
-Arahan visual mengikuti brief proyek `AQUATRACE_PROMPT_DESAIN_META.md` yang
-diberikan pengguna; file brief tersebut tidak disertakan di repositori ini.
-Pemetaan implementasi dan batasan tata letak dicatat dalam
-`docs/desain/design-system.md`. Montserrat, JetBrains Mono, dan Material Symbols
-Outlines dimuat melalui Google Fonts; konfigurasi Tailwind memakai CDN v3.4.17.
-Koneksi eksternal diperlukan untuk font, ikon, dan utility Tailwind dari CDN.
+Aturan visual proyek dicatat di
+[docs/desain/AQUATRACE_PROMPT_DESAIN_META.md](./docs/desain/AQUATRACE_PROMPT_DESAIN_META.md);
+implementasi dan rasio kontras ada di [docs/desain/design-system.md](./docs/desain/design-system.md).
+Font Montserrat v31, JetBrains Mono v24, dan Material Symbols Outlined v387
+dihost lokal di `app/static/fonts/` untuk demo offline. Lisensi OFL dan Apache-2.0
+disertakan bersama aset. CSS dan JavaScript lokal menyediakan semua komponen;
+Tailwind CDN tidak digunakan. `tailwind-config.js` menyimpan padanan token untuk
+alat build Tailwind bila diperlukan, tetapi tidak dibutuhkan aplikasi runtime.
+Tanpa internet, font/icon/font stack cadangan lokal/system tetap tersedia.
 
 ## Konfigurasi MySQL
 

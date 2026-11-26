@@ -151,15 +151,23 @@ menyediakan implementasi atau data proyek.
 - Grafik sensor memakai urutan sampel dari API dan skala otomatis berdasarkan
   rentang nilai yang diterima; tidak ada nilai ambang resmi atau garis baku
   mutu yang ditambahkan.
-- Brief `AQUATRACE_PROMPT_DESAIN_META.md` tidak tersedia sebagai file di
-  workspace, tetapi arahan visual yang diberikan pengguna diterapkan:
-  Montserrat, JetBrains Mono untuk angka, Material Symbols Outlined, tombol
-  pil, kartu datar membulat, fokus keyboard, ikon dan teks untuk status,
-  kobalt sebagai aksi utama, serta ungu khusus telemetri. Nilai warna dan
-  perhitungan kontras didokumentasikan di `docs/desain/design-system.md`.
-- Berkas tata letak referensi `docs/desain/referensi/index.html` tidak tersedia.
-  UI memakai kerangka responsif staf/sidebar dan warga/navigasi bawah; struktur
-  ini adalah adaptasi baru, bukan klaim menyalin tata letak referensi.
-- Sumber font, ikon, dan Tailwind dimuat dari CDN eksternal; saat offline
-  browser menggunakan fallback font dan CSS lokal, tetapi utility Tailwind,
-  font, dan ikon eksternal tidak dijamin tersedia.
+- Versi awal memakai font/icon/CDN eksternal; detail itu sudah digantikan oleh
+  keputusan re-skin Fase 9 di bawah.
+
+## Re-skin Fase 9
+
+- Brief desain disimpan persis pada `docs/desain/AQUATRACE_PROMPT_DESAIN_META.md`.
+  Pengguna secara eksplisit membatalkan pemakaian `docs/desain/referensi/index.html`;
+  karena itu layout tidak disalin dari referensi tersebut.
+- Tailwind CDN dihapus karena UI tidak memakai utility hasil kompilasi. CSS
+  lokal menjadi runtime styling; `tailwind-config.js` adalah peta token lengkap
+  untuk proses build Tailwind di masa mendatang, bukan ketergantungan runtime.
+- Font Montserrat v31, JetBrains Mono v24, Material Symbols Outlined v387
+  disimpan lokal bersama lisensinya agar tipografi/ikon tersedia tanpa internet.
+  Font memiliki fallback system; tidak ada font proprietary Optimistic VF.
+- `requirements.txt` dipasang dan dites di `.venv` yang baru. Semua versi
+  dependensi dipin ke versi yang terpasang dan lolos `pytest`.
+- Palet status tetap menggunakan success/warning/critical sesuai brief;
+  teks pada badge hijau/amber memakai ink-deep, teks critical memakai putih,
+  dan warna stone/primary-soft dibatasi ke penggunaan non-teks yang memenuhi
+  kontras non-text.

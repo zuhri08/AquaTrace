@@ -6,7 +6,7 @@
     <label>Dari <select name="dari_source_id" required>{% for source in sources %}<option value="{{ source.id }}">{{ source.nama }}</option>{% endfor %}</select></label>
     <label>Ke <select name="ke_source_id" required>{% for source in sources %}<option value="{{ source.id }}">{{ source.nama }}</option>{% endfor %}</select></label>
     <label>Jarak (km) <input name="jarak_km" type="number" step="any" min="0.000001" required></label>
-    <button class="button button-dark" type="submit">Tambah edge</button></form></div>
+    <button class="button button-core" type="submit">Tambah edge</button></form></div>
   {% set visual_key = "network-graph" %}{% set visual_type = "graph" %}{% set visual_title = "Peta aliran sumber" %}{% set visual_caption = "Node dan edge dimuat dari API; gunakan kontrol zoom atau seret untuk menjelajah." %}{% set visual_api_url = url_for("api.graph_visualization") %}
   {% include "partials/_visualisasi.html" %}
   <h2>Edge · arah hulu ke hilir</h2>

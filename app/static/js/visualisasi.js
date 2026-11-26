@@ -69,6 +69,7 @@
     const content = root.querySelector(".visual-content");
     content.replaceChildren();
     const error = message("visual-error", `Data tidak dapat dimuat: ${detail}`, "alert");
+    error.prepend(icon("error"));
     const button = element("button", "button button-secondary", "Coba lagi");
     button.type = "button";
     button.addEventListener("click", retry);
@@ -107,8 +108,11 @@
             front.setAttribute("aria-label", "Sampel berikutnya");
             card.append(front);
           }
-          const details = [item.status, item.position ? `Posisi #${item.position}` : null].filter(Boolean).join(" · ");
-          if (details) card.append(element("p", "", details));
+          if (item.status) card.append(statusBadge(item.status));
+          if (item.position) card.append(element("p", "muted", `Posisi #${item.position}`));
+          if (data.rear && data.rear.id === item.id && (!data.front || data.rear.id !== data.front.id)) {
+            card.append(element("span", "structure-marker", "REAR"));
+          }
           list.append(card);
         });
         lane.append(list);
@@ -146,7 +150,7 @@
     const list = element("div", "stack-list");
     items.forEach((item, index) => {
       const card = element("article", `stack-item${index === 0 ? " is-top" : ""}`);
-      if (index === 0) card.append(element("span", "stack-top-label", "TOP"));
+      if (index === 0) card.append(element("span", "structure-marker stack-top-label", "TOP"));
       if (item.field) {
         card.append(element("strong", "", fieldLabels[item.field] || item.field));
         card.append(document.createTextNode(`: ${item.value}`));
@@ -193,11 +197,30 @@
       return;
     }
     const tree = element("div", "tree-list");
+    const trace = (data.evaluation && data.evaluation.trace) || [];
+    const comparisons = trace.filter((line) => line.includes(" terpenuhi)") || line.includes(" tidak terpenuhi)"));
+    let comparisonIndex = 0;
+    const markEvaluation = (node) => {
+      if (!node || node.type === "verdict") return;
+      const line = comparisons[comparisonIndex++];
+      if (line) {
+        node.highlighted = line.includes("(terpenuhi)") ? "true" : "false";
+        markEvaluation(node.highlighted === "true" ? node.true : node.false);
+      }
+    };
+    if (data.evaluation) markEvaluation(rootNode);
+    if (data.evaluation) {
+      let evaluatedLeaf = rootNode;
+      while (evaluatedLeaf && evaluatedLeaf.type !== "verdict") {
+        evaluatedLeaf = evaluatedLeaf[evaluatedLeaf.highlighted || "false"];
+      }
+      if (evaluatedLeaf) evaluatedLeaf.highlighted = true;
+    }
     const build = (node) => {
       if (!node) return element("div", "tree-node", "Node tidak tersedia");
       const container = element("div", "tree-node");
       if (node.type === "verdict") {
-        const verdict = element("div", "tree-verdict");
+        const verdict = element(`div`, `tree-verdict${node.highlighted ? " is-highlighted" : ""}`);
         verdict.append(statusBadge(node.verdict), document.createTextNode(node.message || ""));
         container.append(verdict);
         return container;
@@ -205,8 +228,8 @@
       const title = `${fieldLabels[node.feature] || node.feature} ${node.operator} ${node.threshold}`;
       container.append(element("div", "tree-condition", title));
       const branches = element("div", "tree-branches");
-      [["Jika ya", node.true], ["Jika tidak", node.false]].forEach(([label, child]) => {
-        const branch = element("section");
+      [["Jika ya", node.true, "true"], ["Jika tidak", node.false, "false"]].forEach(([label, child, outcome]) => {
+        const branch = element("section", `tree-branch${node.highlighted === outcome ? " is-highlighted" : ""}`);
         branch.append(element("span", "tree-branch-label", label), build(child));
         branches.append(branch);
       });
@@ -342,6 +365,14 @@
       const position = positions.get(node.id);
       const status = node.status;
       const statusClass = status === "BERSIH" ? "is-clean" : status === "WASPADA" ? "is-warning" : status === "TIDAK_LAYAK" ? "is-critical" : "is-neutral";
+      if (highlightedNodes.has(node.id)) {
+        viewport.append(svgElement("circle", {
+          cx: position.x,
+          cy: position.y,
+          r: "29",
+          class: "graph-node-selection"
+        }));
+      }
       const circle = svgElement("circle", {
         cx: position.x,
         cy: position.y,
@@ -397,12 +428,8 @@
     svg.addEventListener("pointerup", endDrag);
     svg.addEventListener("pointercancel", endDrag);
     const legend = element("div", "graph-legend");
-    [["#298354", "Bersih"], ["#b18412", "Waspada"], ["#e41e3f", "Tidak layak"], ["#7d8995", "Belum diuji"]].forEach(([color, label]) => {
-      const item = element("span");
-      const dot = element("i", "legend-dot");
-      dot.style.backgroundColor = color;
-      item.append(dot, document.createTextNode(label));
-      legend.append(item);
+    ["BERSIH", "WASPADA", "TIDAK_LAYAK", "belum_diuji"].forEach((status) => {
+      legend.append(statusBadge(status));
     });
     const resultPanel = element("div", "graph-result");
     const result = data.result;

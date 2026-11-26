@@ -53,6 +53,14 @@ def _get_all(client, paths):
 def test_public_routes_render_without_login(app):
     client = app.test_client()
     _get_all(client, ["/", "/publik", "/publik/telemetri", "/login", "/register"])
+    landing = client.get("/")
+    assert b"cdn.tailwindcss.com" not in landing.data
+    stylesheet = client.get("/static/css/aquatrace.css")
+    assert stylesheet.status_code == 200
+    assert b"montserrat-v31-300.ttf" in stylesheet.data
+    assert client.get("/static/fonts/montserrat-v31-300.ttf").status_code == 200
+    assert client.get("/static/fonts/jetbrains-mono-v24-400.ttf").status_code == 200
+    assert client.get("/static/fonts/material-symbols-outlined-v387.ttf").status_code == 200
     assert client.get("/api/public/graph").status_code == 200
     assert client.get("/api/public/telemetry/latest").status_code == 200
 

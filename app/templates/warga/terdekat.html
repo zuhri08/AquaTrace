@@ -2,7 +2,7 @@
 {% block title %}Sumber bersih terdekat — AquaTrace{% endblock %}
 {% block content %}
 <section class="dashboard"><p class="eyebrow">WARGA · GRAPH</p><h1>Cari sumber bersih terdekat</h1>
-  <form method="post" class="form-stack"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><label for="source_id">Sumber asal</label><select id="source_id" name="source_id">{% for source in sources %}<option value="{{ source.id }}" {% if source.id == selected_source_id %}selected{% endif %}>{{ source.nama }}</option>{% endfor %}</select><button class="button button-primary" type="submit">Kalkulasi rute</button></form>
+  <form method="post" class="form-stack"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><label for="source_id">Sumber asal</label><select id="source_id" name="source_id">{% for source in sources %}<option value="{{ source.id }}" {% if source.id == selected_source_id %}selected{% endif %}>{{ source.nama }}</option>{% endfor %}</select><button class="button button-core" type="submit">Kalkulasi rute</button></form>
   {% if selected_source_id %}
     {% set visual_key = "nearest-graph-" ~ selected_source_id %}{% set visual_type = "graph" %}{% set visual_title = "Rute sumber bersih terdekat" %}{% set visual_caption = "Node dan rute terdekat dihitung ulang oleh API." %}{% set visual_api_url = url_for("api.graph_nearest_visualization", source_id=selected_source_id) %}
     {% include "partials/_visualisasi.html" %}

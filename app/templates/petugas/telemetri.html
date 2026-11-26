@@ -2,7 +2,7 @@
 {% block title %}Log telemetri IoT — AquaTrace{% endblock %}
 {% block content %}
 <section class="dashboard"><p class="eyebrow">PETUGAS LAB · TELEMETRI</p><h1>Log telemetri IoT</h1>
-  <form method="post" action="{{ url_for('iot.process_telemetry') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button button-primary" type="submit">Proses antrean telemetri</button></form>
+  <form method="post" action="{{ url_for('iot.process_telemetry') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button button-core" type="submit">Proses antrean telemetri</button></form>
   {% set visual_key = "telemetry-queue" %}{% set visual_type = "telemetry-queue" %}{% set visual_title = "Antrean FIFO telemetri" %}{% set visual_caption = "Bacaan yang menunggu diproses, FRONT ditandai dari API." %}{% set visual_api_url = url_for("api.telemetry_queue_visualization") %}
   {% include "partials/_visualisasi.html" %}
   {% set visual_key = "telemetry-latest" %}{% set visual_type = "telemetry-feed" %}{% set visual_title = "Bacaan sensor terbaru" %}{% set visual_caption = "Hasil bacaan dan status perangkat dari API." %}{% set visual_api_url = url_for("api.telemetry_latest_visualization") %}
