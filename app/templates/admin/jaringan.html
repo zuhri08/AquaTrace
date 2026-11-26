@@ -2,6 +2,7 @@
 {% block title %}Jaringan sumber — AquaTrace{% endblock %}
 {% block content %}
 <section class="dashboard"><p class="eyebrow">ADMIN · GRAPH</p><h1>Jaringan aliran</h1>
+  <p class="muted">Atribusi geometri sungai: © OpenStreetMap contributors · Open Database License (ODbL) 1.0.</p>
   <div class="empty-card"><h2>Tambah edge berarah</h2><form method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <label>Dari <select name="dari_source_id" required>{% for source in sources %}<option value="{{ source.id }}">{{ source.nama }}</option>{% endfor %}</select></label>
     <label>Ke <select name="ke_source_id" required>{% for source in sources %}<option value="{{ source.id }}">{{ source.nama }}</option>{% endfor %}</select></label>
@@ -10,6 +11,11 @@
   {% set visual_key = "network-graph" %}{% set visual_type = "graph" %}{% set visual_title = "Peta aliran sumber" %}{% set visual_caption = "Node dan edge dimuat dari API; gunakan kontrol zoom atau seret untuk menjelajah." %}{% set visual_api_url = url_for("api.graph_visualization") %}
   {% include "partials/_visualisasi.html" %}
   <h2>Edge · arah hulu ke hilir</h2>
-  {% for edge in edges %}<article class="empty-card"><p>{{ edge.source_from.nama }} → {{ edge.source_to.nama }} · {{ edge.jarak_km }} km</p><form method="post" action="{{ url_for('admin.hapus_edge', edge_id=edge.id) }}" data-confirm="Hapus koneksi aliran ini?"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button button-danger" type="submit">Hapus edge</button></form></article>{% else %}<p>Belum ada edge.</p>{% endfor %}
+  {% for edge in edges %}<article class="empty-card"><p>{{ edge.source_from.nama }} → {{ edge.source_to.nama }} · {{ edge.jarak_km }} km</p>
+    {% set provenance_source = edge.sumber_jarak|replace("_", " ")|upper %}
+    {% set provenance_simulated = edge.sumber_jarak == "simulasi" %}
+    {% include "partials/_provenance_badge.html" %}
+    {% if edge.terverifikasi %}<span class="tag">Terverifikasi</span>{% else %}<span class="tag">Belum diverifikasi</span>{% endif %}
+    <form method="post" action="{{ url_for('admin.hapus_edge', edge_id=edge.id) }}" data-confirm="Hapus koneksi aliran ini?"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button button-danger" type="submit">Hapus edge</button></form></article>{% else %}<p>Belum ada edge.</p>{% endfor %}
 </section>
 {% endblock %}

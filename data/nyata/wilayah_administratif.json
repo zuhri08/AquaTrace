@@ -1,0 +1,642 @@
+{
+  "source": "BPS WebGIS Kode Relasi Wilayah",
+  "source_url": "https://sig.bps.go.id/kode-relasi",
+  "api_base": "https://sig.bps.go.id/api/v1/kode-relasi",
+  "retrieved_at": "2026-11-26T06:02:00.237511+00:00",
+  "period_bps": "2024_1",
+  "period_kemendagri": "2025",
+  "province_code": "35",
+  "attribution": "Badan Pusat Statistik (BPS) dan Kementerian Dalam Negeri",
+  "regions": [
+    {
+      "kode_bps": "35",
+      "nama": "Jawa Timur",
+      "level": "provinsi",
+      "parent_code": null,
+      "kode_pum": "35"
+    },
+    {
+      "kode_bps": "3515",
+      "nama": "Kabupaten Sidoarjo",
+      "level": "kabupaten",
+      "parent_code": "35",
+      "kode_pum": "35.15"
+    },
+    {
+      "kode_bps": "3515010",
+      "nama": "Tarik",
+      "level": "kecamatan",
+      "parent_code": "3515",
+      "kode_pum": "35.15.01"
+    },
+    {
+      "kode_bps": "3515020",
+      "nama": "Prambon",
+      "level": "kecamatan",
+      "parent_code": "3515",
+      "kode_pum": "35.15.02"
+    },
+    {
+      "kode_bps": "3515030",
+      "nama": "Krembung",
+      "level": "kecamatan",
+      "parent_code": "3515",
+      "kode_pum": "35.15.03"
+    },
+    {
+      "kode_bps": "3515040",
+      "nama": "Porong",
+      "level": "kecamatan",
+      "parent_code": "3515",
+      "kode_pum": "35.15.04"
+    },
+    {
+      "kode_bps": "3515050",
+      "nama": "Jabon",
+      "level": "kecamatan",
+      "parent_code": "3515",
+      "kode_pum": "35.15.05"
+    },
+    {
+      "kode_bps": "3515060",
+      "nama": "Tanggulangin",
+      "level": "kecamatan",
+      "parent_code": "3515",
+      "kode_pum": "35.15.06"
+    },
+    {
+      "kode_bps": "3515070",
+      "nama": "Candi",
+      "level": "kecamatan",
+      "parent_code": "3515",
+      "kode_pum": "35.15.07"
+    },
+    {
+      "kode_bps": "3515080",
+      "nama": "Tulangan",
+      "level": "kecamatan",
+      "parent_code": "3515",
+      "kode_pum": "35.15.09"
+    },
+    {
+      "kode_bps": "3515090",
+      "nama": "Wonoayu",
+      "level": "kecamatan",
+      "parent_code": "3515",
+      "kode_pum": "35.15.10"
+    },
+    {
+      "kode_bps": "3515100",
+      "nama": "Sukodono",
+      "level": "kecamatan",
+      "parent_code": "3515",
+      "kode_pum": "35.15.14"
+    },
+    {
+      "kode_bps": "3515110",
+      "nama": "Sidoarjo",
+      "level": "kecamatan",
+      "parent_code": "3515",
+      "kode_pum": "35.15.08"
+    },
+    {
+      "kode_bps": "3515120",
+      "nama": "Buduran",
+      "level": "kecamatan",
+      "parent_code": "3515",
+      "kode_pum": "35.15.15"
+    },
+    {
+      "kode_bps": "3515130",
+      "nama": "Sedati",
+      "level": "kecamatan",
+      "parent_code": "3515",
+      "kode_pum": "35.15.17"
+    },
+    {
+      "kode_bps": "3515140",
+      "nama": "Waru",
+      "level": "kecamatan",
+      "parent_code": "3515",
+      "kode_pum": "35.15.18"
+    },
+    {
+      "kode_bps": "3515150",
+      "nama": "Gedangan",
+      "level": "kecamatan",
+      "parent_code": "3515",
+      "kode_pum": "35.15.16"
+    },
+    {
+      "kode_bps": "3515160",
+      "nama": "Taman",
+      "level": "kecamatan",
+      "parent_code": "3515",
+      "kode_pum": "35.15.13"
+    },
+    {
+      "kode_bps": "3515170",
+      "nama": "Krian",
+      "level": "kecamatan",
+      "parent_code": "3515",
+      "kode_pum": "35.15.11"
+    },
+    {
+      "kode_bps": "3515180",
+      "nama": "Balong Bendo",
+      "level": "kecamatan",
+      "parent_code": "3515",
+      "kode_pum": "35.15.12"
+    },
+    {
+      "kode_bps": "3516",
+      "nama": "Kabupaten Mojokerto",
+      "level": "kabupaten",
+      "parent_code": "35",
+      "kode_pum": "35.16"
+    },
+    {
+      "kode_bps": "3516010",
+      "nama": "Jatirejo",
+      "level": "kecamatan",
+      "parent_code": "3516",
+      "kode_pum": "35.16.01"
+    },
+    {
+      "kode_bps": "3516020",
+      "nama": "Gondang",
+      "level": "kecamatan",
+      "parent_code": "3516",
+      "kode_pum": "35.16.02"
+    },
+    {
+      "kode_bps": "3516030",
+      "nama": "Pacet",
+      "level": "kecamatan",
+      "parent_code": "3516",
+      "kode_pum": "35.16.03"
+    },
+    {
+      "kode_bps": "3516040",
+      "nama": "Trawas",
+      "level": "kecamatan",
+      "parent_code": "3516",
+      "kode_pum": "35.16.04"
+    },
+    {
+      "kode_bps": "3516050",
+      "nama": "Ngoro",
+      "level": "kecamatan",
+      "parent_code": "3516",
+      "kode_pum": "35.16.05"
+    },
+    {
+      "kode_bps": "3516060",
+      "nama": "Pungging",
+      "level": "kecamatan",
+      "parent_code": "3516",
+      "kode_pum": "35.16.06"
+    },
+    {
+      "kode_bps": "3516070",
+      "nama": "Kutorejo",
+      "level": "kecamatan",
+      "parent_code": "3516",
+      "kode_pum": "35.16.07"
+    },
+    {
+      "kode_bps": "3516080",
+      "nama": "Mojosari",
+      "level": "kecamatan",
+      "parent_code": "3516",
+      "kode_pum": "35.16.08"
+    },
+    {
+      "kode_bps": "3516090",
+      "nama": "Bangsal",
+      "level": "kecamatan",
+      "parent_code": "3516",
+      "kode_pum": "35.16.10"
+    },
+    {
+      "kode_bps": "3516091",
+      "nama": "Mojoanyar",
+      "level": "kecamatan",
+      "parent_code": "3516",
+      "kode_pum": "35.16.18"
+    },
+    {
+      "kode_bps": "3516100",
+      "nama": "Dlanggu",
+      "level": "kecamatan",
+      "parent_code": "3516",
+      "kode_pum": "35.16.09"
+    },
+    {
+      "kode_bps": "3516110",
+      "nama": "Puri",
+      "level": "kecamatan",
+      "parent_code": "3516",
+      "kode_pum": "35.16.11"
+    },
+    {
+      "kode_bps": "3516120",
+      "nama": "Trowulan",
+      "level": "kecamatan",
+      "parent_code": "3516",
+      "kode_pum": "35.16.12"
+    },
+    {
+      "kode_bps": "3516130",
+      "nama": "Sooko",
+      "level": "kecamatan",
+      "parent_code": "3516",
+      "kode_pum": "35.16.13"
+    },
+    {
+      "kode_bps": "3516140",
+      "nama": "Gedek",
+      "level": "kecamatan",
+      "parent_code": "3516",
+      "kode_pum": "35.16.14"
+    },
+    {
+      "kode_bps": "3516150",
+      "nama": "Kemlagi",
+      "level": "kecamatan",
+      "parent_code": "3516",
+      "kode_pum": "35.16.15"
+    },
+    {
+      "kode_bps": "3516160",
+      "nama": "Jetis",
+      "level": "kecamatan",
+      "parent_code": "3516",
+      "kode_pum": "35.16.16"
+    },
+    {
+      "kode_bps": "3516170",
+      "nama": "Dawar Blandong",
+      "level": "kecamatan",
+      "parent_code": "3516",
+      "kode_pum": "35.16.17"
+    },
+    {
+      "kode_bps": "3525",
+      "nama": "Kabupaten Gresik",
+      "level": "kabupaten",
+      "parent_code": "35",
+      "kode_pum": "35.25"
+    },
+    {
+      "kode_bps": "3525010",
+      "nama": "Wringinanom",
+      "level": "kecamatan",
+      "parent_code": "3525",
+      "kode_pum": "35.25.06"
+    },
+    {
+      "kode_bps": "3525020",
+      "nama": "Driyorejo",
+      "level": "kecamatan",
+      "parent_code": "3525",
+      "kode_pum": "35.25.15"
+    },
+    {
+      "kode_bps": "3525030",
+      "nama": "Kedamean",
+      "level": "kecamatan",
+      "parent_code": "3525",
+      "kode_pum": "35.25.08"
+    },
+    {
+      "kode_bps": "3525040",
+      "nama": "Menganti",
+      "level": "kecamatan",
+      "parent_code": "3525",
+      "kode_pum": "35.25.13"
+    },
+    {
+      "kode_bps": "3525050",
+      "nama": "Cerme",
+      "level": "kecamatan",
+      "parent_code": "3525",
+      "kode_pum": "35.25.11"
+    },
+    {
+      "kode_bps": "3525060",
+      "nama": "Benjeng",
+      "level": "kecamatan",
+      "parent_code": "3525",
+      "kode_pum": "35.25.04"
+    },
+    {
+      "kode_bps": "3525070",
+      "nama": "Balongpanggang",
+      "level": "kecamatan",
+      "parent_code": "3525",
+      "kode_pum": "35.25.02"
+    },
+    {
+      "kode_bps": "3525080",
+      "nama": "Duduksampeyan",
+      "level": "kecamatan",
+      "parent_code": "3525",
+      "kode_pum": "35.25.05"
+    },
+    {
+      "kode_bps": "3525090",
+      "nama": "Kebomas",
+      "level": "kecamatan",
+      "parent_code": "3525",
+      "kode_pum": "35.25.14"
+    },
+    {
+      "kode_bps": "3525100",
+      "nama": "Gresik",
+      "level": "kecamatan",
+      "parent_code": "3525",
+      "kode_pum": "35.25.16"
+    },
+    {
+      "kode_bps": "3525110",
+      "nama": "Manyar",
+      "level": "kecamatan",
+      "parent_code": "3525",
+      "kode_pum": "35.25.10"
+    },
+    {
+      "kode_bps": "3525120",
+      "nama": "Bungah",
+      "level": "kecamatan",
+      "parent_code": "3525",
+      "kode_pum": "35.25.12"
+    },
+    {
+      "kode_bps": "3525130",
+      "nama": "Sidayu",
+      "level": "kecamatan",
+      "parent_code": "3525",
+      "kode_pum": "35.25.09"
+    },
+    {
+      "kode_bps": "3525140",
+      "nama": "Dukun",
+      "level": "kecamatan",
+      "parent_code": "3525",
+      "kode_pum": "35.25.01"
+    },
+    {
+      "kode_bps": "3525150",
+      "nama": "Panceng",
+      "level": "kecamatan",
+      "parent_code": "3525",
+      "kode_pum": "35.25.03"
+    },
+    {
+      "kode_bps": "3525160",
+      "nama": "Ujungpangkah",
+      "level": "kecamatan",
+      "parent_code": "3525",
+      "kode_pum": "35.25.07"
+    },
+    {
+      "kode_bps": "3525170",
+      "nama": "Sangkapura",
+      "level": "kecamatan",
+      "parent_code": "3525",
+      "kode_pum": "35.25.17"
+    },
+    {
+      "kode_bps": "3525180",
+      "nama": "Tambak",
+      "level": "kecamatan",
+      "parent_code": "3525",
+      "kode_pum": "35.25.18"
+    },
+    {
+      "kode_bps": "3578",
+      "nama": "Kota Surabaya",
+      "level": "kota",
+      "parent_code": "35",
+      "kode_pum": "35.78"
+    },
+    {
+      "kode_bps": "3578010",
+      "nama": "Karang Pilang",
+      "level": "kecamatan",
+      "parent_code": "3578",
+      "kode_pum": "35.78.01"
+    },
+    {
+      "kode_bps": "3578020",
+      "nama": "Jambangan",
+      "level": "kecamatan",
+      "parent_code": "3578",
+      "kode_pum": "35.78.23"
+    },
+    {
+      "kode_bps": "3578030",
+      "nama": "Gayungan",
+      "level": "kecamatan",
+      "parent_code": "3578",
+      "kode_pum": "35.78.22"
+    },
+    {
+      "kode_bps": "3578040",
+      "nama": "Wonocolo",
+      "level": "kecamatan",
+      "parent_code": "3578",
+      "kode_pum": "35.78.02"
+    },
+    {
+      "kode_bps": "3578050",
+      "nama": "Tenggilis Mejoyo",
+      "level": "kecamatan",
+      "parent_code": "3578",
+      "kode_pum": "35.78.24"
+    },
+    {
+      "kode_bps": "3578060",
+      "nama": "Gunung Anyar",
+      "level": "kecamatan",
+      "parent_code": "3578",
+      "kode_pum": "35.78.25"
+    },
+    {
+      "kode_bps": "3578070",
+      "nama": "Rungkut",
+      "level": "kecamatan",
+      "parent_code": "3578",
+      "kode_pum": "35.78.03"
+    },
+    {
+      "kode_bps": "3578080",
+      "nama": "Sukolilo",
+      "level": "kecamatan",
+      "parent_code": "3578",
+      "kode_pum": "35.78.09"
+    },
+    {
+      "kode_bps": "3578090",
+      "nama": "Mulyorejo",
+      "level": "kecamatan",
+      "parent_code": "3578",
+      "kode_pum": "35.78.26"
+    },
+    {
+      "kode_bps": "3578100",
+      "nama": "Gubeng",
+      "level": "kecamatan",
+      "parent_code": "3578",
+      "kode_pum": "35.78.08"
+    },
+    {
+      "kode_bps": "3578110",
+      "nama": "Wonokromo",
+      "level": "kecamatan",
+      "parent_code": "3578",
+      "kode_pum": "35.78.04"
+    },
+    {
+      "kode_bps": "3578120",
+      "nama": "Dukuh Pakis",
+      "level": "kecamatan",
+      "parent_code": "3578",
+      "kode_pum": "35.78.21"
+    },
+    {
+      "kode_bps": "3578130",
+      "nama": "Wiyung",
+      "level": "kecamatan",
+      "parent_code": "3578",
+      "kode_pum": "35.78.20"
+    },
+    {
+      "kode_bps": "3578140",
+      "nama": "Lakarsantri",
+      "level": "kecamatan",
+      "parent_code": "3578",
+      "kode_pum": "35.78.18"
+    },
+    {
+      "kode_bps": "3578141",
+      "nama": "Sambikerep",
+      "level": "kecamatan",
+      "parent_code": "3578",
+      "kode_pum": "35.78.31"
+    },
+    {
+      "kode_bps": "3578150",
+      "nama": "Tandes",
+      "level": "kecamatan",
+      "parent_code": "3578",
+      "kode_pum": "35.78.14"
+    },
+    {
+      "kode_bps": "3578160",
+      "nama": "Suko Manunggal",
+      "level": "kecamatan",
+      "parent_code": "3578",
+      "kode_pum": "35.78.27"
+    },
+    {
+      "kode_bps": "3578170",
+      "nama": "Sawahan",
+      "level": "kecamatan",
+      "parent_code": "3578",
+      "kode_pum": "35.78.06"
+    },
+    {
+      "kode_bps": "3578180",
+      "nama": "Tegalsari",
+      "level": "kecamatan",
+      "parent_code": "3578",
+      "kode_pum": "35.78.05"
+    },
+    {
+      "kode_bps": "3578190",
+      "nama": "Genteng",
+      "level": "kecamatan",
+      "parent_code": "3578",
+      "kode_pum": "35.78.07"
+    },
+    {
+      "kode_bps": "3578200",
+      "nama": "Tambaksari",
+      "level": "kecamatan",
+      "parent_code": "3578",
+      "kode_pum": "35.78.10"
+    },
+    {
+      "kode_bps": "3578210",
+      "nama": "Kenjeran",
+      "level": "kecamatan",
+      "parent_code": "3578",
+      "kode_pum": "35.78.17"
+    },
+    {
+      "kode_bps": "3578211",
+      "nama": "Bulak",
+      "level": "kecamatan",
+      "parent_code": "3578",
+      "kode_pum": "35.78.29"
+    },
+    {
+      "kode_bps": "3578220",
+      "nama": "Simokerto",
+      "level": "kecamatan",
+      "parent_code": "3578",
+      "kode_pum": "35.78.11"
+    },
+    {
+      "kode_bps": "3578230",
+      "nama": "Semampir",
+      "level": "kecamatan",
+      "parent_code": "3578",
+      "kode_pum": "35.78.16"
+    },
+    {
+      "kode_bps": "3578240",
+      "nama": "Pabean Cantian",
+      "level": "kecamatan",
+      "parent_code": "3578",
+      "kode_pum": "35.78.12"
+    },
+    {
+      "kode_bps": "3578250",
+      "nama": "Bubutan",
+      "level": "kecamatan",
+      "parent_code": "3578",
+      "kode_pum": "35.78.13"
+    },
+    {
+      "kode_bps": "3578260",
+      "nama": "Krembangan",
+      "level": "kecamatan",
+      "parent_code": "3578",
+      "kode_pum": "35.78.15"
+    },
+    {
+      "kode_bps": "3578270",
+      "nama": "Asemrowo",
+      "level": "kecamatan",
+      "parent_code": "3578",
+      "kode_pum": "35.78.28"
+    },
+    {
+      "kode_bps": "3578280",
+      "nama": "Benowo",
+      "level": "kecamatan",
+      "parent_code": "3578",
+      "kode_pum": "35.78.19"
+    },
+    {
+      "kode_bps": "3578281",
+      "nama": "Pakal",
+      "level": "kecamatan",
+      "parent_code": "3578",
+      "kode_pum": "35.78.30"
+    }
+  ]
+}

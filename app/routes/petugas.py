@@ -155,7 +155,11 @@ def riwayat_sumber(source_id):
 @petugas_bp.post("/sumber/<int:source_id>/riwayat/<int:result_id>/hapus")
 @role_required("petugas_lab", "admin")
 def hapus_riwayat(source_id, result_id):
-    result = delete_history_entry(source_id, result_id)
+    try:
+        result = delete_history_entry(source_id, result_id)
+    except ValueError as error:
+        flash(str(error), "error")
+        return redirect(url_for("petugas.riwayat_sumber", source_id=source_id))
     if result is None:
         abort(404)
     flash(f"Entri #{result.id} dihapus; sampel kembali menunggu.", "success")

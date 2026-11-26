@@ -1,11 +1,14 @@
 import hashlib
+import json
 import random
 from datetime import datetime, timedelta
+from pathlib import Path
 
 from sqlalchemy import inspect, text
 from werkzeug.security import generate_password_hash
 
 from app import create_app, db
+from app.data_migrations import ensure_phase_d_schema
 from app.models import (
     IotDevice,
     Region,
@@ -35,7 +38,107 @@ def _get_or_create(model, lookup, values):
     return item
 
 
+def _seed_official_regions():
+    path = (
+        Path(__file__).resolve().parent
+        / "data"
+        / "nyata"
+        / "wilayah_administratif.json"
+    )
+    if not path.exists():
+        raise FileNotFoundError(f"Snapshot wilayah resmi tidak ditemukan: {path}")
+    with path.open(encoding="utf-8") as file:
+        snapshot = json.load(file)
+
+    regions_by_code = {}
+    for row in snapshot["regions"]:
+        parent = regions_by_code.get(row["parent_code"])
+        region = _get_or_create(
+            Region,
+            {
+                "nama": row["nama"],
+                "level": row["level"],
+                "parent_id": parent.id if parent else None,
+            },
+            {},
+        )
+        regions_by_code[row["kode_bps"]] = region
+    return regions_by_code
+
+
+def _seed_osm_network(regions_by_code):
+    path = (
+        Path(__file__).resolve().parent
+        / "data"
+        / "nyata"
+        / "osm_river_geometry.json"
+    )
+    if not path.exists():
+        raise FileNotFoundError(f"Snapshot geometri OSM tidak ditemukan: {path}")
+    with path.open(encoding="utf-8") as file:
+        snapshot = json.load(file)
+
+    sources_by_key = {}
+    for row in snapshot["sources"]:
+        references = " ".join(row["referensi"])
+        source = _get_or_create(
+            WaterSource,
+            {"nama": row["name"]},
+            {
+                "tipe": row["type"],
+                "region_id": (
+                    regions_by_code[row["region_code"]].id
+                    if row["region_code"] in regions_by_code
+                    else None
+                ),
+                "lat": row["lat"],
+                "lng": row["lng"],
+                "status_terakhir": "belum_diuji",
+                "status_sensor": "belum_ada",
+                "sumber_data": row["source_data"],
+                "is_simulated": row["is_simulated"],
+                "referensi": references,
+                "dibuat_oleh": None,
+            },
+        )
+        source.tipe = row["type"]
+        source.region_id = (
+            regions_by_code[row["region_code"]].id
+            if row["region_code"] in regions_by_code
+            else None
+        )
+        source.lat = row["lat"]
+        source.lng = row["lng"]
+        source.status_terakhir = "belum_diuji"
+        source.status_sensor = "belum_ada"
+        source.sumber_data = row["source_data"]
+        source.is_simulated = row["is_simulated"]
+        source.referensi = references
+        sources_by_key[row["key"]] = source
+
+    edge_count = 0
+    for row in snapshot["edges"]:
+        source = sources_by_key[row["from"]]
+        target = sources_by_key[row["to"]]
+        edge = _get_or_create(
+            RiverEdge,
+            {"dari_source_id": source.id, "ke_source_id": target.id},
+            {
+                "jarak_km": row["jarak_km"],
+                "sumber_jarak": row["sumber_jarak"],
+                "terverifikasi": row["terverifikasi"],
+            },
+        )
+        edge.jarak_km = row["jarak_km"]
+        edge.sumber_jarak = row["sumber_jarak"]
+        edge.terverifikasi = row["terverifikasi"]
+        edge_count += 1
+    return {"sources": len(sources_by_key), "edges": edge_count}
+
+
 def seed_database():
+    ensure_phase_d_schema()
+    ensure_telemetry_schema()
     users = {}
     for email, name, role in (
         ("admin@aquatrace.test", "Admin Demo", "admin"),
@@ -53,34 +156,6 @@ def seed_database():
             },
         )
 
-    province = _get_or_create(
-        Region, {"nama": "Provinsi Simulasi"}, {"level": "provinsi", "parent_id": None}
-    )
-    cities = [
-        _get_or_create(
-            Region,
-            {"nama": f"Kota Simulasi {i}"},
-            {"level": "kota", "parent_id": province.id},
-        )
-        for i in range(1, 3)
-    ]
-    villages = []
-    for city_index, city in enumerate(cities, start=1):
-        for subdistrict_index in range(1, 3):
-            subdistrict = _get_or_create(
-                Region,
-                {"nama": f"Kecamatan {city_index}-{subdistrict_index}"},
-                {"level": "kecamatan", "parent_id": city.id},
-            )
-            for village_index in range(1, 3):
-                villages.append(
-                    _get_or_create(
-                        Region,
-                        {"nama": f"Desa {city_index}-{subdistrict_index}-{village_index}"},
-                        {"level": "desa", "parent_id": subdistrict.id},
-                    )
-                )
-
     sources = []
     types = ("sumur", "sungai", "pdam", "mata_air")
     for index in range(15):
@@ -89,21 +164,34 @@ def seed_database():
             {"nama": f"Sumber Simulasi {index + 1:02d}"},
             {
                 "tipe": types[index % len(types)],
-                "region_id": villages[index % len(villages)].id,
-                "lat": -7.25 + index * 0.001,
-                "lng": 112.75 + index * 0.001,
+                "region_id": None,
+                "lat": None,
+                "lng": None,
                 "status_terakhir": "belum_diuji",
                 "status_sensor": "belum_ada",
+                "sumber_data": "simulasi",
+                "is_simulated": True,
+                "referensi": "DEMO/SIMULASI; koordinat tidak disediakan.",
                 "dibuat_oleh": users["warga"].id,
             },
         )
+        source.region_id = None
+        source.lat = None
+        source.lng = None
+        source.sumber_data = "simulasi"
+        source.is_simulated = True
+        source.referensi = "DEMO/SIMULASI; koordinat tidak disediakan."
         sources.append(source)
 
     for index in range(14):
         _get_or_create(
             RiverEdge,
             {"dari_source_id": sources[index].id, "ke_source_id": sources[index + 1].id},
-            {"jarak_km": round(0.5 + (index % 5) * 0.25, 2)},
+            {
+                "jarak_km": round(0.5 + (index % 5) * 0.25, 2),
+                "sumber_jarak": "simulasi",
+                "terverifikasi": False,
+            },
         )
 
     sample_specs = (
@@ -148,8 +236,15 @@ def seed_database():
                         "bukan pengganti uji laboratorium lengkap."
                     ),
                     "diuji_oleh": users["petugas_lab"].id,
+                    "sumber_data": "simulasi",
+                    "referensi": "DEMO/SIMULASI; seed AquaTrace.",
+                    "tanggal_pengambilan": None,
                 },
             )
+            result = TestResult.query.filter_by(sample_id=sample.id).one()
+            result.sumber_data = "simulasi"
+            result.referensi = "DEMO/SIMULASI; seed AquaTrace."
+            result.tanggal_pengambilan = None
             sample.source.status_terakhir = verdicts[result_index]
 
     rng = random.Random(42)
@@ -166,6 +261,8 @@ def seed_database():
                 "last_seen": utcnow(),
             },
         )
+        device.source.is_simulated = True
+        device.source.sumber_data = "simulasi"
         devices.append(device)
 
     seed_reading_start = datetime(2025, 1, 1, 12, 0)
@@ -190,8 +287,16 @@ def seed_database():
                 )
             )
 
+    real_data = _seed_official_regions()
+    real_network = _seed_osm_network(real_data)
     db.session.commit()
-    return {"users": len(users), "regions": len(villages) + 7, "sources": len(sources)}
+    return {
+        "users": len(users),
+        "regions": Region.query.count(),
+        "sources": WaterSource.query.count(),
+        "real_sources": real_network["sources"],
+        "real_edges": real_network["edges"],
+    }
 
 
 def ensure_telemetry_schema():
@@ -238,7 +343,6 @@ def main():
     app = create_app()
     with app.app_context():
         db.create_all()
-        ensure_telemetry_schema()
         seed_database()
         print("Seed selesai. Kredensial demo:")
         print("Semua role: password AquaTraceDemo123!")

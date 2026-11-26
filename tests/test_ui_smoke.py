@@ -63,6 +63,17 @@ def test_public_routes_render_without_login(app):
     assert client.get("/static/fonts/material-symbols-outlined-v387.ttf").status_code == 200
     assert client.get("/api/public/graph").status_code == 200
     assert client.get("/api/public/telemetry/latest").status_code == 200
+    real_node = next(
+        node
+        for node in client.get("/api/public/graph").json["data"]["nodes"]
+        if node["name"] == "Kali Surabaya · simpul OSM di sisi Mlirip"
+    )
+    assert real_node["is_simulated"] is False
+    assert real_node["status"] is None
+    assert real_node["status_label"] == "Belum ada data"
+    public_page = client.get("/publik").get_data(as_text=True)
+    assert "Data nyata (sumber: OSM)" in public_page
+    assert "Belum ada data" in public_page
 
 
 def test_warga_routes_render_and_visual_apis_are_present(app):

@@ -25,6 +25,7 @@ def search_history(source_id, result_id):
 def _recalculate_source_status(source):
     latest = (
         TestResult.query.filter_by(source_id=source.id)
+        .filter(TestResult.vonis.isnot(None))
         .order_by(TestResult.created_at.desc(), TestResult.id.desc())
         .first()
     )
@@ -44,6 +45,8 @@ def delete_history_entry(source_id, result_id):
         persisted = db.session.get(TestResult, result.id)
         if persisted is None:
             return None
+        if persisted.sumber_data == "publikasi":
+            raise ValueError("Hasil publikasi hanya dapat diperbarui melalui data sumbernya.")
         sample = db.session.get(Sample, persisted.sample_id)
         db.session.delete(persisted)
         if sample is not None:
@@ -70,6 +73,8 @@ def correct_history_entry(source_id, result_id, measurements):
         persisted = db.session.get(TestResult, result.id)
         if persisted is None:
             return None
+        if persisted.sumber_data == "publikasi":
+            raise ValueError("Hasil publikasi tidak dapat dikoreksi dengan ambang contoh.")
         verdict, trace = evaluate_measurements(measurements)
         persisted.ph = float(measurements["ph"])
         persisted.kekeruhan_ntu = float(measurements["kekeruhan_ntu"])

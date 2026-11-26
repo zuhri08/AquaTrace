@@ -7,6 +7,7 @@ from app.models import (
     IotDevice,
     RiverEdge,
     Sample,
+    TestResult,
     WaterSource,
 )
 from app.routes.auth import role_required
@@ -181,6 +182,22 @@ def linked_list_visualization(source_id):
                 "kekeruhan_ntu": result.kekeruhan_ntu,
                 "tds_mgl": result.tds_mgl,
                 "status": result.vonis,
+                "status_label": (
+                    result.vonis
+                    or (
+                        "Belum diklasifikasikan"
+                        if result.sumber_data == "publikasi"
+                        else "Belum ada data"
+                    )
+                ),
+                "source_data": result.sumber_data,
+                "is_simulated": result.sumber_data in {"simulasi", "sensor_demo"},
+                "reference": result.referensi,
+                "sample_date": (
+                    result.tanggal_pengambilan.isoformat()
+                    if result.tanggal_pengambilan
+                    else None
+                ),
                 "created_at": result.created_at.isoformat(),
                 "jejak": result.jejak_keputusan,
             }
@@ -254,12 +271,42 @@ def region_tree_visualization():
 def _graph_data(highlight_nodes=None, highlight_edges=None, result=None):
     sources = WaterSource.query.order_by(WaterSource.id).all()
     edges = RiverEdge.query.order_by(RiverEdge.id).all()
+    latest_results = {}
+    for test_result in TestResult.query.order_by(
+        TestResult.created_at.desc(), TestResult.id.desc()
+    ).all():
+        latest_results.setdefault(test_result.source_id, test_result)
+
+    def source_status(source):
+        test_result = latest_results.get(source.id)
+        if test_result is not None:
+            return (
+                test_result.vonis,
+                test_result.vonis or "Belum diklasifikasikan",
+            )
+        if source.is_simulated:
+            return (
+                source.status_terakhir,
+                (
+                    "Belum diuji"
+                    if source.status_terakhir == "belum_diuji"
+                    else source.status_terakhir
+                ),
+            )
+        return None, "Belum ada data"
+
+    statuses = {source.id: source_status(source) for source in sources}
     return {
         "nodes": [
             {
                 "id": source.id,
                 "name": source.nama,
-                "status": source.status_terakhir,
+                "status": statuses[source.id][0],
+                "status_label": statuses[source.id][1],
+                "has_test_result": source.id in latest_results,
+                "source_data": source.sumber_data,
+                "is_simulated": source.is_simulated,
+                "reference": source.referensi,
                 "sensor_status": source.status_sensor,
                 "lat": source.lat,
                 "lng": source.lng,
@@ -272,6 +319,8 @@ def _graph_data(highlight_nodes=None, highlight_edges=None, result=None):
                 "from": edge.dari_source_id,
                 "to": edge.ke_source_id,
                 "distance_km": edge.jarak_km,
+                "distance_source": edge.sumber_jarak,
+                "verified": edge.terverifikasi,
             }
             for edge in edges
         ],

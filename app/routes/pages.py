@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template
 
-from app.models import IotDevice, WaterSource
+from app.models import IotDevice, TestResult, WaterSource
 from app.routes.auth import role_required
 from app.services.jaringan import nearest_clean_source
 from app.services.wilayah import region_dashboard_data
@@ -15,17 +15,26 @@ def landing():
 
 @pages_bp.get("/publik")
 def publik():
-    measured = WaterSource.query.filter(WaterSource.status_terakhir != "belum_diuji").count()
-    clean = WaterSource.query.filter_by(status_terakhir="BERSIH").count()
     sources = WaterSource.query.order_by(WaterSource.nama).all()
+    latest_results = {}
+    for result in TestResult.query.order_by(
+        TestResult.created_at.desc(), TestResult.id.desc()
+    ).all():
+        latest_results.setdefault(result.source_id, result)
+    measured = len(latest_results)
+    classified = sum(result.vonis is not None for result in latest_results.values())
+    clean = sum(result.vonis == "BERSIH" for result in latest_results.values())
     devices = IotDevice.query.order_by(IotDevice.kode).all()
-    index = round(clean * 100 / measured, 1) if measured else None
+    index = round(clean * 100 / classified, 1) if classified else None
     return render_template(
         "publik/index.html",
         measured_count=measured,
+        classified_count=classified,
         clean_count=clean,
         clean_index=index,
         source_count=len(sources),
+        sources=sources,
+        latest_results=latest_results,
         device_ids=[device.id for device in devices],
     )
 

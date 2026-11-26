@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 
-from sqlalchemy import CheckConstraint, Index, UniqueConstraint
+from sqlalchemy import CheckConstraint, Index, UniqueConstraint, text
 
 from app import db
 
@@ -34,7 +34,7 @@ class Region(db.Model):
     __tablename__ = "regions"
     __table_args__ = (
         CheckConstraint(
-            "level IN ('provinsi', 'kota', 'kecamatan', 'desa')",
+            "level IN ('provinsi', 'kabupaten', 'kota', 'kecamatan', 'desa')",
             name="ck_regions_level",
         ),
         Index("ix_regions_parent_level", "parent_id", "level"),
@@ -69,6 +69,10 @@ class WaterSource(db.Model):
             "('belum_ada', 'BERSIH', 'WASPADA', 'TIDAK_LAYAK')",
             name="ck_water_sources_status_sensor",
         ),
+        CheckConstraint(
+            "sumber_data IN ('osm', 'publikasi', 'resmi', 'simulasi')",
+            name="ck_water_sources_sumber_data",
+        ),
         CheckConstraint("lat >= -90 AND lat <= 90", name="ck_sources_lat"),
         CheckConstraint("lng >= -180 AND lng <= 180", name="ck_sources_lng"),
         Index("ix_water_sources_region_status", "region_id", "status_terakhir"),
@@ -78,12 +82,19 @@ class WaterSource(db.Model):
     nama = db.Column(db.String(160), nullable=False, index=True)
     tipe = db.Column(db.String(20), nullable=False)
     region_id = db.Column(
-        db.Integer, db.ForeignKey("regions.id", ondelete="RESTRICT"), nullable=False
+        db.Integer, db.ForeignKey("regions.id", ondelete="RESTRICT"), nullable=True
     )
-    lat = db.Column(db.Float, nullable=False)
-    lng = db.Column(db.Float, nullable=False)
+    lat = db.Column(db.Float, nullable=True)
+    lng = db.Column(db.Float, nullable=True)
     status_terakhir = db.Column(db.String(20), nullable=False, default="belum_diuji")
     status_sensor = db.Column(db.String(20), nullable=False, default="belum_ada")
+    sumber_data = db.Column(
+        db.String(20), nullable=False, default="simulasi", server_default="simulasi"
+    )
+    is_simulated = db.Column(
+        db.Boolean, nullable=False, default=True, server_default=text("1")
+    )
+    referensi = db.Column(db.Text)
     dibuat_oleh = db.Column(
         db.Integer, db.ForeignKey("users.id", ondelete="SET NULL")
     )
@@ -143,8 +154,12 @@ class TestResult(db.Model):
         ),
         CheckConstraint("tds_mgl >= 0 AND tds_mgl <= 5000", name="ck_results_tds"),
         CheckConstraint(
-            "vonis IN ('BERSIH', 'WASPADA', 'TIDAK_LAYAK')",
+            "vonis IS NULL OR vonis IN ('BERSIH', 'WASPADA', 'TIDAK_LAYAK')",
             name="ck_results_vonis",
+        ),
+        CheckConstraint(
+            "sumber_data IN ('publikasi', 'lab', 'sensor_demo', 'simulasi')",
+            name="ck_test_results_sumber_data",
         ),
         UniqueConstraint("sample_id", name="uq_test_results_sample"),
         Index("ix_test_results_source_created", "source_id", "created_at"),
@@ -153,7 +168,7 @@ class TestResult(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     sample_id = db.Column(
-        db.Integer, db.ForeignKey("samples.id", ondelete="CASCADE"), nullable=False
+        db.Integer, db.ForeignKey("samples.id", ondelete="CASCADE"), nullable=True
     )
     source_id = db.Column(
         db.Integer, db.ForeignKey("water_sources.id", ondelete="RESTRICT"), nullable=False
@@ -161,8 +176,13 @@ class TestResult(db.Model):
     ph = db.Column(db.Float, nullable=False)
     kekeruhan_ntu = db.Column(db.Float, nullable=False)
     tds_mgl = db.Column(db.Float, nullable=False)
-    vonis = db.Column(db.String(20), nullable=False)
+    vonis = db.Column(db.String(20), nullable=True)
     jejak_keputusan = db.Column(db.Text, nullable=False)
+    sumber_data = db.Column(
+        db.String(20), nullable=False, default="simulasi", server_default="simulasi"
+    )
+    referensi = db.Column(db.Text)
+    tanggal_pengambilan = db.Column(db.Date)
     diuji_oleh = db.Column(
         db.Integer, db.ForeignKey("users.id", ondelete="SET NULL")
     )
@@ -181,6 +201,10 @@ class RiverEdge(db.Model):
         ),
         CheckConstraint("jarak_km > 0", name="ck_river_edges_distance"),
         CheckConstraint(
+            "sumber_jarak IN ('geometri_osm', 'literatur', 'simulasi')",
+            name="ck_river_edges_sumber_jarak",
+        ),
+        CheckConstraint(
             "dari_source_id != ke_source_id", name="ck_river_edges_not_self"
         ),
         Index("ix_river_edges_from", "dari_source_id"),
@@ -195,6 +219,12 @@ class RiverEdge(db.Model):
         db.Integer, db.ForeignKey("water_sources.id", ondelete="CASCADE"), nullable=False
     )
     jarak_km = db.Column(db.Float, nullable=False)
+    sumber_jarak = db.Column(
+        db.String(40), nullable=False, default="simulasi", server_default="simulasi"
+    )
+    terverifikasi = db.Column(
+        db.Boolean, nullable=False, default=False, server_default=text("0")
+    )
 
     source_from = db.relationship(
         "WaterSource", foreign_keys=[dari_source_id], back_populates="outgoing_edges"

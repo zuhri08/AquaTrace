@@ -185,6 +185,10 @@ code, .mono, .metric-value { font-family: "JetBrains Mono", Consolas, monospace;
   white-space: nowrap;
 }
 .sdg-chip { color: var(--ink-deep); background: var(--surface-soft); }
+.provenance-badge { border: 1px solid var(--hairline); color: var(--ink-deep); background: var(--surface-soft); }
+.provenance-simulated { border-style: dashed; }
+.provenance-real { border-color: var(--selected-border); }
+.public-source-list { margin-top: 40px; }
 .pill-tab {
   min-height: 44px;
   padding: 8px 16px;
@@ -514,6 +518,7 @@ details:not(.behind-scenes) > summary { color: var(--steel); cursor: pointer; fo
 .graph-node.is-neutral { fill: var(--stone); }
 .graph-node.is-highlighted { stroke: var(--canvas); stroke-width: 2; }
 .graph-node-label { fill: var(--ink-deep); font: 12px Montserrat, Helvetica, Arial, sans-serif; font-weight: 700; }
+.graph-node-meta { fill: var(--slate); font: 11px Montserrat, Helvetica, Arial, sans-serif; }
 .graph-legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 12px; color: var(--slate); font-size: 12px; }
 .graph-legend span { display: inline-flex; align-items: center; gap: 6px; }
 .legend-dot { width: 10px; height: 10px; border-radius: var(--radius-circle); display: inline-block; }

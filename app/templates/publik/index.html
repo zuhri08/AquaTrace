@@ -3,17 +3,45 @@
 {% block content %}
 <section class="dashboard">
   <header class="hero public-hero">
-    <p class="eyebrow">DATA SIMULASI · SDG 6</p>
+    <p class="eyebrow">GEOMETRI DATA NYATA · PENGUKURAN DEMO</p>
     <h1>Kondisi sumber air</h1>
-    <p class="lead">Ringkasan ini menampilkan data yang tersedia di AquaTrace. Status dan pengukuran adalah informasi simulasi, bukan sertifikasi kelayakan air.</p>
+    <p class="lead">Geometri sungai dan wilayah mencantumkan sumbernya. Hasil uji dan telemetri demo diberi label simulasi; status bukan sertifikasi kelayakan air.</p>
   </header>
   <div class="card-grid">
     <article class="metric-card"><p class="metric-label">Sumber terdata</p><p class="metric-value">{{ source_count }}</p><p class="metric-caption">dari basis data saat ini</p></article>
-    <article class="metric-card"><p class="metric-label">Sudah memiliki hasil</p><p class="metric-value">{{ measured_count }}</p><p class="metric-caption">sumber yang pernah diuji</p></article>
-    <article class="metric-card"><p class="metric-label">Indeks hasil bersih</p><p class="metric-value">{% if clean_index is not none %}{{ clean_index }}%{% else %}—{% endif %}</p><p class="metric-caption">{% if measured_count %}{{ clean_count }} dari {{ measured_count }} sumber teruji{% else %}Belum ada hasil uji{% endif %}</p></article>
+    <article class="metric-card"><p class="metric-label">Sudah memiliki hasil</p><p class="metric-value">{{ measured_count }}</p><p class="metric-caption">sumber dengan hasil pengukuran</p></article>
+    <article class="metric-card"><p class="metric-label">Indeks hasil bersih</p><p class="metric-value">{% if clean_index is not none %}{{ clean_index }}%{% else %}—{% endif %}</p><p class="metric-caption">{% if classified_count %}{{ clean_count }} dari {{ classified_count }} sumber terklasifikasi{% else %}Belum ada hasil yang diklasifikasikan{% endif %}</p></article>
   </div>
   {% set visual_key = "public-network" %}{% set visual_type = "graph" %}{% set visual_title = "Peta jaringan sumber" %}{% set visual_caption = "Node dan aliran dibaca dari API publik." %}{% set visual_api_url = url_for("api.public_graph_visualization") %}
   {% include "partials/_visualisasi.html" %}
+  <section class="public-source-list" aria-labelledby="public-source-heading">
+    <h2 id="public-source-heading">Sumber dan status data</h2>
+    <div class="card-grid">
+      {% for source in sources %}
+      {% set latest = latest_results.get(source.id) %}
+      <article class="card">
+        <h3>{{ source.nama }}</h3>
+        {% set provenance_source = source.sumber_data|upper %}
+        {% set provenance_simulated = source.is_simulated %}
+        {% include "partials/_provenance_badge.html" %}
+        {% if latest is none %}
+          {% if source.is_simulated %}{% set status = "belum_diuji" %}{% else %}{% set status = "belum_ada" %}{% endif %}
+          {% include "partials/_status_badge.html" %}
+        {% elif latest.vonis %}
+          {% set status = latest.vonis %}
+          {% include "partials/_status_badge.html" %}
+        {% else %}
+          <span class="status-badge status-neutral"><span class="material-symbols-outlined" aria-hidden="true">info</span>Hasil belum diklasifikasikan</span>
+        {% endif %}
+        {% if latest and latest.sumber_data != source.sumber_data %}
+          {% set provenance_source = latest.sumber_data|upper %}
+          {% set provenance_simulated = latest.sumber_data in ("simulasi", "sensor_demo") %}
+          {% include "partials/_provenance_badge.html" %}
+        {% endif %}
+      </article>
+      {% endfor %}
+    </div>
+  </section>
   {% set visual_key = "public-feed" %}{% set visual_type = "telemetry-feed" %}{% set visual_title = "Feed sensor terkini" %}{% set visual_caption = "Data ringkas perangkat tanpa informasi identitas pengguna." %}{% set visual_api_url = url_for("api.public_telemetry_visualization") %}
   {% include "partials/_visualisasi.html" %}
   <h2 class="telemetry-accent">Grafik sensor</h2>

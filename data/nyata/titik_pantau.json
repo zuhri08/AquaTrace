@@ -1,0 +1,468 @@
+{
+  "source": "OpenStreetMap API 0.6",
+  "retrieved_at": "2026-11-26T06:25:52.127084+00:00",
+  "attribution": "© OpenStreetMap contributors",
+  "license": "Open Database License (ODbL) 1.0",
+  "verified_osm_nodes": [
+    {
+      "key": "mlirip",
+      "name": "Kali Surabaya · simpul OSM di sisi Mlirip",
+      "type": "sungai",
+      "osm_node_id": 6537680329,
+      "lat": -7.4469694,
+      "lng": 112.4566879,
+      "region_code": null,
+      "source_data": "osm",
+      "is_simulated": false,
+      "referensi": [
+        "https://www.openstreetmap.org/node/6537680329",
+        "https://www.openstreetmap.org/way/934029648"
+      ],
+      "catatan": "Simpul geometri sungai OSM yang berada di sisi Mlirip; bukan verifikasi lokasi Bendung Mlirip."
+    },
+    {
+      "key": "jagir-junction",
+      "name": "Kali Jagir · simpang OSM dengan Kali Surabaya",
+      "type": "sungai",
+      "osm_node_id": 312077143,
+      "lat": -7.2996836,
+      "lng": 112.7379275,
+      "region_code": null,
+      "source_data": "osm",
+      "is_simulated": false,
+      "referensi": [
+        "https://www.openstreetmap.org/node/312077143",
+        "https://www.openstreetmap.org/way/29100243",
+        "https://www.openstreetmap.org/way/464034862",
+        "https://www.openstreetmap.org/way/309956660"
+      ],
+      "catatan": "Simpang alur OSM; bukan lokasi intake atau bendung terverifikasi."
+    },
+    {
+      "key": "jagir-ngagel",
+      "name": "Kali Jagir · simpul OSM di Ngagel",
+      "type": "sungai",
+      "osm_node_id": 4592052456,
+      "lat": -7.3006742,
+      "lng": 112.7414445,
+      "region_code": null,
+      "source_data": "osm",
+      "is_simulated": false,
+      "referensi": [
+        "https://www.openstreetmap.org/node/4592052456",
+        "https://www.openstreetmap.org/way/464034861"
+      ],
+      "catatan": "Titik di alur OSM; bukan verifikasi intake PDAM Ngagel."
+    },
+    {
+      "key": "kali-mas-end",
+      "name": "Kali Mas · simpul OSM 320089529",
+      "type": "sungai",
+      "osm_node_id": 320089529,
+      "lat": -7.2646355,
+      "lng": 112.7506961,
+      "region_code": null,
+      "source_data": "osm",
+      "is_simulated": false,
+      "referensi": [
+        "https://www.openstreetmap.org/node/320089529",
+        "https://www.openstreetmap.org/way/309956660",
+        "https://www.openstreetmap.org/way/475190704",
+        "https://www.openstreetmap.org/way/447632039"
+      ],
+      "catatan": "Nama OSM tercatat sebagai 'Kali Mas'; alias 'Kalimas' belum diverifikasi."
+    }
+  ],
+  "unverified_points": [
+    {
+      "name": "Bendung Mlirip",
+      "lat": null,
+      "lng": null,
+      "distance_km": null,
+      "upstream_order": null,
+      "osm_candidates": [],
+      "todo": "Tidak ditemukan objek OSM bernama persis; koordinat, urutan, dan jarak belum terverifikasi."
+    },
+    {
+      "name": "Hulu Kali Tengah",
+      "lat": null,
+      "lng": null,
+      "distance_km": null,
+      "upstream_order": null,
+      "osm_candidates": [],
+      "todo": "Tidak ditemukan objek OSM bernama persis; koordinat, urutan, dan jarak belum terverifikasi."
+    },
+    {
+      "name": "Muara Kali Tengah",
+      "lat": null,
+      "lng": null,
+      "distance_km": null,
+      "upstream_order": null,
+      "osm_candidates": [],
+      "todo": "Tidak ditemukan objek OSM bernama persis; koordinat, urutan, dan jarak belum terverifikasi."
+    },
+    {
+      "name": "Canggu",
+      "lat": null,
+      "lng": null,
+      "distance_km": null,
+      "upstream_order": null,
+      "osm_candidates": [
+        {
+          "type": "node",
+          "id": 1308657690,
+          "name": "Canggu",
+          "reference": "https://www.openstreetmap.org/node/1308657690"
+        },
+        {
+          "type": "node",
+          "id": 1308665958,
+          "name": "Canggu",
+          "reference": "https://www.openstreetmap.org/node/1308665958"
+        }
+      ],
+      "todo": "Objek bernama ditemukan di OSM, tetapi belum membuktikan lokasi titik pantau, intake, bendung, atau posisi pada alur sungai."
+    },
+    {
+      "name": "Perning",
+      "lat": null,
+      "lng": null,
+      "distance_km": null,
+      "upstream_order": null,
+      "osm_candidates": [
+        {
+          "type": "node",
+          "id": 1308688752,
+          "name": "Perning",
+          "reference": "https://www.openstreetmap.org/node/1308688752"
+        },
+        {
+          "type": "node",
+          "id": 1308705403,
+          "name": "Perning",
+          "reference": "https://www.openstreetmap.org/node/1308705403"
+        }
+      ],
+      "todo": "Objek bernama ditemukan di OSM, tetapi belum membuktikan lokasi titik pantau, intake, bendung, atau posisi pada alur sungai."
+    },
+    {
+      "name": "Jrebeng",
+      "lat": null,
+      "lng": null,
+      "distance_km": null,
+      "upstream_order": null,
+      "osm_candidates": [
+        {
+          "type": "node",
+          "id": 1308704252,
+          "name": "Jrebeng",
+          "reference": "https://www.openstreetmap.org/node/1308704252"
+        }
+      ],
+      "todo": "Objek bernama ditemukan di OSM, tetapi belum membuktikan lokasi titik pantau, intake, bendung, atau posisi pada alur sungai."
+    },
+    {
+      "name": "Cangkir",
+      "lat": null,
+      "lng": null,
+      "distance_km": null,
+      "upstream_order": null,
+      "osm_candidates": [
+        {
+          "type": "node",
+          "id": 1308674184,
+          "name": "Cangkir",
+          "reference": "https://www.openstreetmap.org/node/1308674184"
+        }
+      ],
+      "todo": "Objek bernama ditemukan di OSM, tetapi belum membuktikan lokasi titik pantau, intake, bendung, atau posisi pada alur sungai."
+    },
+    {
+      "name": "Bambe",
+      "lat": null,
+      "lng": null,
+      "distance_km": null,
+      "upstream_order": null,
+      "osm_candidates": [
+        {
+          "type": "node",
+          "id": 1308679040,
+          "name": "Bambe",
+          "reference": "https://www.openstreetmap.org/node/1308679040"
+        }
+      ],
+      "todo": "Objek bernama ditemukan di OSM, tetapi belum membuktikan lokasi titik pantau, intake, bendung, atau posisi pada alur sungai."
+    },
+    {
+      "name": "Karangpilang (intake PDAM)",
+      "lat": null,
+      "lng": null,
+      "distance_km": null,
+      "upstream_order": null,
+      "osm_candidates": [
+        {
+          "type": "node",
+          "id": 3283836680,
+          "name": "Karangpilang",
+          "reference": "https://www.openstreetmap.org/node/3283836680"
+        }
+      ],
+      "todo": "Objek bernama ditemukan di OSM, tetapi belum membuktikan lokasi titik pantau, intake, bendung, atau posisi pada alur sungai."
+    },
+    {
+      "name": "Sepanjang",
+      "lat": null,
+      "lng": null,
+      "distance_km": null,
+      "upstream_order": null,
+      "osm_candidates": [
+        {
+          "type": "node",
+          "id": 1308657121,
+          "name": "Sepanjang",
+          "reference": "https://www.openstreetmap.org/node/1308657121"
+        },
+        {
+          "type": "node",
+          "id": 1308696490,
+          "name": "Sepanjang",
+          "reference": "https://www.openstreetmap.org/node/1308696490"
+        },
+        {
+          "type": "node",
+          "id": 1308703211,
+          "name": "Sepanjang",
+          "reference": "https://www.openstreetmap.org/node/1308703211"
+        },
+        {
+          "type": "node",
+          "id": 11182212139,
+          "name": "Sepanjang",
+          "reference": "https://www.openstreetmap.org/node/11182212139"
+        },
+        {
+          "type": "node",
+          "id": 11182212148,
+          "name": "Sepanjang",
+          "reference": "https://www.openstreetmap.org/node/11182212148"
+        },
+        {
+          "type": "node",
+          "id": 11783860991,
+          "name": "Sepanjang",
+          "reference": "https://www.openstreetmap.org/node/11783860991"
+        }
+      ],
+      "todo": "Objek bernama ditemukan di OSM, tetapi belum membuktikan lokasi titik pantau, intake, bendung, atau posisi pada alur sungai."
+    },
+    {
+      "name": "Gunungsari",
+      "lat": null,
+      "lng": null,
+      "distance_km": null,
+      "upstream_order": null,
+      "osm_candidates": [
+        {
+          "type": "node",
+          "id": 1308637792,
+          "name": "Gunungsari",
+          "reference": "https://www.openstreetmap.org/node/1308637792"
+        },
+        {
+          "type": "node",
+          "id": 1308639406,
+          "name": "Gunungsari",
+          "reference": "https://www.openstreetmap.org/node/1308639406"
+        },
+        {
+          "type": "node",
+          "id": 1308666198,
+          "name": "Gunungsari",
+          "reference": "https://www.openstreetmap.org/node/1308666198"
+        },
+        {
+          "type": "node",
+          "id": 1308668270,
+          "name": "Gunungsari",
+          "reference": "https://www.openstreetmap.org/node/1308668270"
+        },
+        {
+          "type": "node",
+          "id": 1308675313,
+          "name": "Gunungsari",
+          "reference": "https://www.openstreetmap.org/node/1308675313"
+        },
+        {
+          "type": "node",
+          "id": 1308696804,
+          "name": "Gunungsari",
+          "reference": "https://www.openstreetmap.org/node/1308696804"
+        },
+        {
+          "type": "node",
+          "id": 1308707752,
+          "name": "Gunungsari",
+          "reference": "https://www.openstreetmap.org/node/1308707752"
+        },
+        {
+          "type": "node",
+          "id": 1308715678,
+          "name": "Gunungsari",
+          "reference": "https://www.openstreetmap.org/node/1308715678"
+        },
+        {
+          "type": "node",
+          "id": 4317392248,
+          "name": "Gunungsari",
+          "reference": "https://www.openstreetmap.org/node/4317392248"
+        },
+        {
+          "type": "node",
+          "id": 5565098451,
+          "name": "Gunungsari",
+          "reference": "https://www.openstreetmap.org/node/5565098451"
+        },
+        {
+          "type": "node",
+          "id": 11262014501,
+          "name": "Gunungsari",
+          "reference": "https://www.openstreetmap.org/node/11262014501"
+        },
+        {
+          "type": "node",
+          "id": 11377227777,
+          "name": "Gunungsari",
+          "reference": "https://www.openstreetmap.org/node/11377227777"
+        },
+        {
+          "type": "node",
+          "id": 11377344568,
+          "name": "Gunungsari",
+          "reference": "https://www.openstreetmap.org/node/11377344568"
+        },
+        {
+          "type": "node",
+          "id": 11377344569,
+          "name": "Gunungsari",
+          "reference": "https://www.openstreetmap.org/node/11377344569"
+        },
+        {
+          "type": "node",
+          "id": 11377345052,
+          "name": "Gunungsari",
+          "reference": "https://www.openstreetmap.org/node/11377345052"
+        },
+        {
+          "type": "node",
+          "id": 11377345053,
+          "name": "Gunungsari",
+          "reference": "https://www.openstreetmap.org/node/11377345053"
+        },
+        {
+          "type": "node",
+          "id": 11378902721,
+          "name": "Gunungsari",
+          "reference": "https://www.openstreetmap.org/node/11378902721"
+        },
+        {
+          "type": "node",
+          "id": 11378903619,
+          "name": "Gunungsari",
+          "reference": "https://www.openstreetmap.org/node/11378903619"
+        },
+        {
+          "type": "node",
+          "id": 13317829837,
+          "name": "Gunungsari",
+          "reference": "https://www.openstreetmap.org/node/13317829837"
+        },
+        {
+          "type": "way",
+          "id": 681011901,
+          "name": "Gunungsari",
+          "reference": "https://www.openstreetmap.org/way/681011901"
+        },
+        {
+          "type": "way",
+          "id": 1280414373,
+          "name": "Gunungsari",
+          "reference": "https://www.openstreetmap.org/way/1280414373"
+        },
+        {
+          "type": "way",
+          "id": 1280435893,
+          "name": "Gunungsari",
+          "reference": "https://www.openstreetmap.org/way/1280435893"
+        }
+      ],
+      "todo": "Objek bernama ditemukan di OSM, tetapi belum membuktikan lokasi titik pantau, intake, bendung, atau posisi pada alur sungai."
+    },
+    {
+      "name": "Bendung Jagir",
+      "lat": null,
+      "lng": null,
+      "distance_km": null,
+      "upstream_order": null,
+      "osm_candidates": [],
+      "todo": "Tidak ditemukan objek OSM bernama persis; koordinat, urutan, dan jarak belum terverifikasi."
+    },
+    {
+      "name": "Ngagel (intake PDAM)",
+      "lat": null,
+      "lng": null,
+      "distance_km": null,
+      "upstream_order": null,
+      "osm_candidates": [
+        {
+          "type": "node",
+          "id": 4785516227,
+          "name": "Ngagel",
+          "reference": "https://www.openstreetmap.org/node/4785516227"
+        },
+        {
+          "type": "node",
+          "id": 5565126818,
+          "name": "Ngagel",
+          "reference": "https://www.openstreetmap.org/node/5565126818"
+        }
+      ],
+      "todo": "Objek bernama ditemukan di OSM, tetapi belum membuktikan lokasi titik pantau, intake, bendung, atau posisi pada alur sungai."
+    },
+    {
+      "name": "Kali Wonokromo",
+      "lat": null,
+      "lng": null,
+      "distance_km": null,
+      "upstream_order": null,
+      "osm_candidates": [],
+      "todo": "Tidak ditemukan objek OSM bernama persis; koordinat, urutan, dan jarak belum terverifikasi."
+    },
+    {
+      "name": "Kalimas",
+      "lat": null,
+      "lng": null,
+      "distance_km": null,
+      "upstream_order": null,
+      "osm_candidates": [],
+      "todo": "Tidak ditemukan objek OSM bernama persis; koordinat, urutan, dan jarak belum terverifikasi."
+    },
+    {
+      "name": "Kali Tengah",
+      "lat": null,
+      "lng": null,
+      "distance_km": null,
+      "upstream_order": null,
+      "osm_candidates": [],
+      "todo": "Tidak ditemukan objek OSM bernama persis; koordinat, urutan, dan jarak belum terverifikasi."
+    },
+    {
+      "name": "Kali Marmoyo",
+      "lat": null,
+      "lng": null,
+      "distance_km": null,
+      "upstream_order": null,
+      "osm_candidates": [],
+      "todo": "Tidak ditemukan objek OSM bernama persis; koordinat, urutan, dan jarak belum terverifikasi."
+    }
+  ]
+}

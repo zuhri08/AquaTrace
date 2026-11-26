@@ -1,0 +1,3 @@
+<span class="tag provenance-badge{% if provenance_simulated %} provenance-simulated{% else %} provenance-real{% endif %}">
+  {% if provenance_simulated %}Simulasi{% else %}Data nyata (sumber: {{ provenance_source }}){% endif %}
+</span>

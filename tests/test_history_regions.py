@@ -139,12 +139,27 @@ def test_recursive_region_tree_counts_contaminated_sources_from_database(app):
                     return found
             return None
 
-        region = find_region(serialized, "Desa 1-1-1")
+        region = find_region(serialized, "Jawa Timur")
         assert region is not None
         expected_in_region = WaterSource.query.filter_by(
             region_id=region["id"], status_terakhir="TIDAK_LAYAK"
         ).count()
-        assert region["jumlah_tercemar"] == expected_in_region == 1
+        assert region["jumlah_tercemar"] == expected_in_region == 0
+
+        def find_source(node, name):
+            if node["type"] == "source" and node["nama"] == name:
+                return node
+            for child in node["children"]:
+                found = find_source(child, name)
+                if found:
+                    return found
+            return None
+
+        demo_source = find_source(serialized, "Sumber Simulasi 09")
+        assert demo_source is not None
+        assert demo_source["is_simulated"] is True
+        assert demo_source["region_known"] is False
+        assert demo_source["status"] == "TIDAK_LAYAK"
 
 
 def test_staff_and_resident_history_pages(app):
@@ -165,7 +180,7 @@ def test_staff_and_resident_history_pages(app):
     dashboard = client.get("/admin/dashboard")
     assert dashboard.status_code == 200
     assert b"Dashboard wilayah" in dashboard.data
-    assert b"Kota Simulasi" in dashboard.data
+    assert b"Jawa Timur" in dashboard.data
 
 
 def _csrf(client):

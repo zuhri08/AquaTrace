@@ -1,11 +1,16 @@
 from app.ds.tree import Tree, TreeNode, hitung_tercemar
-from app.models import Region, WaterSource
+from app.models import Region, TestResult, WaterSource
 
 
 def build_region_tree():
     """Build a hierarchy tree with recursive contaminated-source totals."""
     regions = Region.query.order_by(Region.id).all()
     sources = WaterSource.query.order_by(WaterSource.id).all()
+    latest_results = {}
+    for result in TestResult.query.order_by(
+        TestResult.created_at.desc(), TestResult.id.desc()
+    ).all():
+        latest_results.setdefault(result.source_id, result)
     root = TreeNode(
         {
             "type": "root",
@@ -34,9 +39,14 @@ def build_region_tree():
         parent.children.append(nodes[region.id])
 
     for source in sources:
-        region_node = nodes.get(source.region_id)
-        if region_node is None:
-            continue
+        region_node = nodes.get(source.region_id, tree.root)
+        latest_result = latest_results.get(source.id)
+        if latest_result is not None:
+            status = latest_result.vonis or "belum_diklasifikasikan"
+        elif source.is_simulated:
+            status = source.status_terakhir
+        else:
+            status = "belum_ada"
         region_node.children.append(
             TreeNode(
                 {
@@ -44,8 +54,11 @@ def build_region_tree():
                     "id": source.id,
                     "nama": source.nama,
                     "level": "sumber",
-                    "tercemar": source.status_terakhir == "TIDAK_LAYAK",
-                    "status": source.status_terakhir,
+                    "tercemar": status == "TIDAK_LAYAK",
+                    "status": status,
+                    "sumber_data": source.sumber_data,
+                    "is_simulated": source.is_simulated,
+                    "region_known": source.region_id in nodes,
                     "jumlah_tercemar": 0,
                 }
             )

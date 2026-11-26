@@ -1,8 +1,9 @@
 # AquaTrace
 
-AquaTrace adalah aplikasi simulasi untuk pelaporan sumber, antrean dan diagnosis
-sampel, riwayat uji, pelacakan jaringan air, dan pemantauan sensor IoT. Seluruh
-data demo adalah simulasi.
+AquaTrace adalah aplikasi untuk pelaporan sumber, antrean dan diagnosis sampel,
+riwayat uji, pelacakan jaringan air, dan pemantauan sensor IoT. Pengukuran,
+sampel, dan telemetri demo adalah simulasi; geometri sungai dan hierarki wilayah
+memakai snapshot data nyata yang mencantumkan sumbernya.
 
 ## Persyaratan
 
@@ -49,6 +50,28 @@ Untuk mensimulasikan sensor, gunakan contoh perintah pada
 Lihat [docs/iot/README.md](./docs/iot/README.md) untuk protokol IoT dan simulator.
 Lihat [docs/desain/design-system.md](./docs/desain/design-system.md) untuk
 token visual, komponen, dan pedoman aksesibilitas.
+
+## Sumber dan Kredit
+
+- Geometri Kali Surabaya, Kali Jagir, dan Kali Mas diambil dari OpenStreetMap
+  API/Overpass; jarak edge dihitung mengikuti urutan node way OSM. Arah way
+  `waterway=river` mengikuti konvensi OSM dari hulu ke hilir
+  ([dokumentasi OSM](https://wiki.openstreetmap.org/wiki/Tag:waterway%3Driver)).
+  Kredit: **© OpenStreetMap contributors**. Data tersedia di bawah
+  [ODbL 1.0](https://www.openstreetmap.org/copyright).
+- Hierarki Provinsi Jawa Timur, kabupaten/kota, dan kecamatan bersumber dari
+  [BPS WebGIS Kode Relasi Wilayah](https://sig.bps.go.id/kode-relasi), periode
+  BPS 2024 dan Kemendagri 2025.
+- Snapshot dan referensi sumber ada di `data/nyata/`. Titik geometri OSM bukan
+  klaim lokasi bendung, intake PDAM, atau stasiun pantau. Titik yang belum
+  terverifikasi dibiarkan `NULL` dan dicatat sebagai TODO. Hubungan ke kecamatan
+  juga tidak diisi tanpa batas administratif resmi untuk spatial join.
+- Belum ada hasil uji publikasi yang dimasukkan. Isi `data/nyata/hasil_uji.csv`
+  hanya dari publikasi terverifikasi, lalu jalankan
+  `python scripts/import_data_nyata.py --import-results`. Hasil publikasi
+  disimpan tanpa vonis dari ambang contoh AquaTrace.
+- Hasil laboratorium seed, sampel warga, pembacaan sensor, dan wilayah berlabel
+  simulasi tetap merupakan data demo; tidak ditempatkan pada titik intake PDAM.
 
 ## Kredit desain visual
 
@@ -103,8 +126,10 @@ API key demo (khusus data simulasi lokal; seed hanya menyimpan hash):
 
 ## Data dan batasan
 
-Seluruh data yang di-seed adalah data simulasi tanpa identitas atau alamat asli.
-Angka pengukuran seed bukan klaim baku mutu. Ambang resmi belum diisi dan harus
+Hanya geometri sungai dan hierarki administratif yang bersumber dari data nyata.
+Sampel, hasil uji seed, dan telemetri adalah data simulasi tanpa identitas warga
+atau klaim alamat sampling nyata. Angka pengukuran seed bukan klaim baku mutu.
+Ambang resmi belum diisi dan harus
 diverifikasi manusia dari regulasi yang berlaku sebelum dipakai untuk keputusan.
 Sistem ditujukan untuk screening, bukan pengganti pengujian laboratorium lengkap.
 `app/config/thresholds.py` berisi nilai contoh untuk mendemonstrasikan cabang

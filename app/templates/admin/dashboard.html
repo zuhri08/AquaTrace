@@ -11,7 +11,7 @@
           {% for child in node.children %}{{ region_nodes(child) }}{% endfor %}
         </details>
       {% elif node.type == "source" %}
-        <p>{{ node.nama }} · {% set status = node.status %}{% include "partials/_status_badge.html" %}</p>
+        <p>{{ node.nama }} · {% set status = node.status %}{% include "partials/_status_badge.html" %} · {% if node.is_simulated %}Simulasi{% else %}Data nyata (sumber: {{ node.sumber_data }}){% endif %}{% if not node.region_known %} · Wilayah belum diverifikasi{% endif %}</p>
       {% else %}
         {% for child in node.children %}{{ region_nodes(child) }}{% endfor %}
       {% endif %}

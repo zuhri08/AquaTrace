@@ -171,3 +171,51 @@ menyediakan implementasi atau data proyek.
   teks pada badge hijau/amber memakai ink-deep, teks critical memakai putih,
   dan warna stone/primary-soft dibatasi ke penggunaan non-teks yang memenuhi
   kontras non-text.
+
+## Fase D — data nyata
+
+- Overpass mengembalikan 51 fitur. Waterway bernama yang ditemukan adalah Kali
+  Surabaya (6 way), Kali Jagir (3 way), dan Kali Mas (4 way). Kali Wonokromo,
+  Kalimas (ejaan persis), Kali Tengah, Kali Marmoyo, serta Bendung Mlirip dan
+  Bendung Jagir tidak terverifikasi sebagai fitur yang diminta. Objek bernama
+  seperti Canggu, Perning, Jrebeng, Cangkir, Bambe, Karangpilang, Sepanjang,
+  Gunungsari, dan Ngagel ada di OSM, tetapi tidak membuktikan titik pantau,
+  intake, bendung, atau posisi pada alur; koordinat titik samplingnya tetap
+  `NULL`.
+- Graf hanya memakai simpul geometri OSM: simpul di sisi Mlirip, simpang
+  Kali Surabaya/Jagir, simpul Kali Jagir di Ngagel, dan ujung way Kali Mas.
+  Label secara eksplisit menyebut bahwa ini simpul alur, bukan bendung/intake.
+  Rantai way tersambung berdasarkan ID node OSM, dan jarak merupakan jumlah
+  jarak great-circle pada koordinat geometri OSM, dibulatkan 3 desimal: Mlirip
+  ke simpang Jagir 42.255 km, simpang ke Ngagel 0.404 km, dan cabang Kali Mas
+  sampai node OSM 320089529 sejauh 4.717 km.
+- Arah edge mengikuti urutan node way `waterway=river`, yang menurut dokumentasi
+  OSM menggambar river ke arah hilir. Ini verifikasi berdasarkan konvensi
+  pemetaan OSM, bukan survei hidrologi lapangan. OSM Way Kali Mas 24400892
+  ditemukan tetapi tidak berbagi node dengan rantai yang dipakai, sehingga
+  disimpan pada catatan TODO dan tidak disambungkan ke graf.
+- File `data/nyata/osm_overpass.json` mempertahankan hasil query dan atribusi
+  `© OpenStreetMap contributors`; `osm_river_geometry.json` mencatat way/node,
+  referensi, metode jarak, simpul yang dipakai, edge, serta target yang belum
+  terverifikasi. Dataset OSM digunakan sesuai ODbL 1.0.
+- Data wilayah snapshot bersumber dari BPS WebGIS Kode Relasi Wilayah, kode
+  administrasi Kemendagri periode 2025 dan periode BPS 2024. Cakupan snapshot
+  meliputi Provinsi Jawa Timur dan Kabupaten Gresik, Sidoarjo, Mojokerto serta
+  Kota Surabaya beserta kecamatan; nama dan kode diambil dari endpoint resmi.
+  Batas poligon kecamatan tidak diunduh/di-overlay dengan titik OSM, sehingga
+  `region_code`/`region_id` untuk simpul OSM tetap `NULL` dan tidak ditebak.
+- Sampel, hasil uji seed, dan perangkat/bacaan IoT tetap simulasi pada sumber
+  berlabel DEMO/SIMULASI tanpa koordinat atau kecamatan rekaan. Hierarki
+  administratif yang disediakan seed hanya memakai snapshot BPS; sumber demo
+  yang wilayah tepatnya tidak diketahui tidak dipaksakan ke wilayah nyata.
+  Titik OSM tidak menerima sampel/IoT seed.
+  Tidak ada hasil publikasi yang dibuat. `hasil_uji.csv` hanya berisi header;
+  impor publikasi menyimpan vonis `NULL` dan tidak menjalankan ambang contoh.
+- Migrasi menambah kolom provenance secara aditif. SQLite mematikan pemeriksaan
+  FK pada koneksi migrasi sebelum transaksi, merekonstruksi tabel hanya untuk
+  mengubah check constraint/nullability yang tidak dapat diubah langsung,
+  menjalankan `foreign_key_check` sebelum commit, lalu mengaktifkan FK kembali.
+  MySQL mengubah nullability/check melalui `ALTER TABLE`.
+- Hasil publikasi ditampilkan read-only pada riwayat agar tidak bisa dikoreksi
+  atau diklasifikasikan dengan pohon ambang contoh. Pembaruan data harus berasal
+  dari publikasi sumber, bukan diagnosis AquaTrace.

@@ -1,3 +1,4 @@
+import math
 import re
 
 import pytest
@@ -112,6 +113,54 @@ def test_edge_validation_duplicate_and_removal(app):
         assert remove_river_edge(edge.id) is None
 
 
+def test_real_osm_network_traces_downstream_and_uses_verified_distances(app):
+    with app.app_context():
+        mlirip = WaterSource.query.filter_by(
+            nama="Kali Surabaya · simpul OSM di sisi Mlirip"
+        ).one()
+        jagir = WaterSource.query.filter_by(
+            nama="Kali Jagir · simpang OSM dengan Kali Surabaya"
+        ).one()
+        ngagel = WaterSource.query.filter_by(
+            nama="Kali Jagir · simpul OSM di Ngagel"
+        ).one()
+        mas_end = WaterSource.query.filter_by(
+            nama="Kali Mas · simpul OSM 320089529"
+        ).one()
+
+        edge = RiverEdge.query.filter_by(
+            dari_source_id=mlirip.id, ke_source_id=jagir.id
+        ).one()
+        assert edge.sumber_jarak == "geometri_osm"
+        assert edge.terverifikasi is True
+        assert edge.jarak_km == pytest.approx(42.255, abs=0.001)
+
+        impacted = trace_downstream(mlirip.id)
+        jagir_result = next(item for item in impacted if item["source"].id == jagir.id)
+        assert jagir_result["route"] == [mlirip.id, jagir.id]
+        assert jagir_result["distance_km"] == edge.jarak_km
+
+        graph = build_source_graph()
+        distances, previous = graph.dijkstra(mlirip.id)
+        assert distances[ngagel.id] == pytest.approx(
+            edge.jarak_km
+            + RiverEdge.query.filter_by(
+                dari_source_id=jagir.id, ke_source_id=ngagel.id
+            ).one().jarak_km
+        )
+        assert previous[ngagel.id] == jagir.id
+        assert distances[mas_end.id] == pytest.approx(
+            edge.jarak_km
+            + RiverEdge.query.filter_by(
+                dari_source_id=jagir.id, ke_source_id=mas_end.id
+            ).one().jarak_km
+        )
+        assert previous[mas_end.id] == jagir.id
+        assert trace_downstream(mas_end.id) == []
+        reverse_distances, _ = graph.dijkstra(mas_end.id)
+        assert math.isinf(reverse_distances[mlirip.id])
+
+
 def test_network_routes_enforce_admin_role_and_render_simple_pages(app):
     client = app.test_client()
     assert _login(client, "warga@aquatrace.test").status_code == 302
@@ -122,6 +171,9 @@ def test_network_routes_enforce_admin_role_and_render_simple_pages(app):
     client.post("/logout", data={"csrf_token": _csrf(client)})
     assert _login(client, "admin@aquatrace.test").status_code == 302
     assert client.get("/admin/jaringan").status_code == 200
+    network_page = client.get("/admin/jaringan").get_data(as_text=True)
+    assert "© OpenStreetMap contributors" in network_page
+    assert "Data nyata (sumber: GEOMETRI OSM)" in network_page
     assert client.get("/petugas/lacak-dampak").status_code == 200
 
 

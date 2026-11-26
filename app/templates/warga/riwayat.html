@@ -2,6 +2,9 @@
 {% block title %}Riwayat kualitas air — AquaTrace{% endblock %}
 {% block content %}
 <section class="dashboard"><p class="eyebrow">RIWAYAT SUMBER</p><h1>{{ source.nama }}</h1>
+  {% set provenance_source = source.sumber_data|upper %}
+  {% set provenance_simulated = source.is_simulated %}
+  {% include "partials/_provenance_badge.html" %}
   {% set visual_key = "citizen-source-history-" ~ source.id %}{% set visual_type = "linked-list" %}{% set visual_title = "Hasil uji berurutan" %}{% set visual_caption = "HEAD ke TAIL mengikuti kronologi dari API." %}{% set visual_api_url = url_for("api.linked_list_visualization", source_id=source.id) %}
   {% include "partials/_visualisasi.html" %}
 </section>

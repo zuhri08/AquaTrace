@@ -6,6 +6,7 @@
     TIDAK_LAYAK: ["Tidak layak", "cancel", "status-critical"],
     belum_diuji: ["Belum diuji", "pending", "status-neutral"],
     belum_ada: ["Belum ada data", "sensors_off", "status-neutral"],
+    belum_diklasifikasikan: ["Belum diklasifikasikan", "info", "status-neutral"],
     menunggu: ["Menunggu", "schedule", "status-neutral"],
     antri: ["Antrean", "schedule", "status-neutral"],
     diproses: ["Diproses", "progress_activity", "status-info"],
@@ -180,7 +181,17 @@
       if (endpoints.childNodes.length) card.append(endpoints);
       card.append(element("strong", "", `#${entry.id}`));
       const metrics = element("p", "mono", `pH ${entry.ph ?? "—"} · ${entry.kekeruhan_ntu ?? "—"} NTU · ${entry.tds_mgl ?? "—"} mg/L`);
-      card.append(metrics, statusBadge(entry.status));
+      const provenance = element(
+        "span",
+        `tag provenance-badge ${entry.is_simulated ? "provenance-simulated" : "provenance-real"}`,
+        entry.is_simulated ? "Simulasi" : `Data nyata (sumber: ${entry.source_data})`
+      );
+      card.append(
+        metrics,
+        provenance,
+        statusBadge(entry.status || "belum_diklasifikasikan")
+      );
+      if (entry.reference) card.append(element("p", "muted", `Referensi: ${entry.reference}`));
       if (entry.created_at) card.append(element("p", "muted", entry.created_at));
       wrap.append(card);
       if (index < entries.length - 1) wrap.append(icon("arrow_forward", "list-arrow"));
@@ -264,6 +275,16 @@
       const heading = element("strong", "", title);
       card.append(heading);
       if (node.level) card.append(element("span", "tag", node.level));
+      if (type === "source" && node.sumber_data) {
+        card.append(element(
+          "span",
+          `tag provenance-badge ${node.is_simulated ? "provenance-simulated" : "provenance-real"}`,
+          node.is_simulated ? "Simulasi" : `Data nyata (sumber: ${node.sumber_data})`
+        ));
+        if (!node.region_known) {
+          card.append(element("span", "tag", "Wilayah belum diverifikasi"));
+        }
+      }
       if (node.jumlah_tercemar !== undefined && type !== "source") card.append(element("p", "muted", `${node.jumlah_tercemar} sumber tercemar`));
       if (node.status) card.append(statusBadge(node.status));
       const children = node.children || [];
@@ -349,7 +370,7 @@
         "marker-end": `url(#${arrowId})`
       });
       const title = svgElement("title");
-      title.textContent = `${edge.distance_km} km`;
+      title.textContent = `${edge.distance_km} km · ${edge.distance_source || "sumber jarak tidak tersedia"} · ${edge.verified ? "terverifikasi" : "belum diverifikasi"}`;
       path.append(title);
       viewport.append(path);
       const label = svgElement("text", {
@@ -358,7 +379,10 @@
         class: "graph-edge-label",
         "text-anchor": "middle"
       });
-      label.textContent = `${edge.distance_km} km`;
+      const edgeSource = edge.distance_source === "geometri_osm"
+        ? "OSM"
+        : edge.distance_source || "?";
+      label.textContent = `${edge.distance_km} km · ${edgeSource}`;
       viewport.append(label);
     });
     nodes.forEach((node) => {
@@ -380,7 +404,10 @@
         class: `graph-node ${statusClass}${highlightedNodes.has(node.id) ? " is-highlighted" : ""}`
       });
       const title = svgElement("title");
-      title.textContent = `${node.name} — ${status || "Belum diuji"}`;
+      const provenance = node.is_simulated
+        ? "Simulasi"
+        : `Data nyata · ${node.source_data || "sumber tidak diketahui"}`;
+      title.textContent = `${node.name} — ${node.status_label || "Belum ada data"} — ${provenance}`;
       circle.append(title);
       viewport.append(circle);
       const label = svgElement("text", {
@@ -391,6 +418,22 @@
       });
       label.textContent = node.name;
       viewport.append(label);
+      const provenanceLabel = svgElement("text", {
+        x: position.x,
+        y: position.y + 59,
+        class: "graph-node-meta",
+        "text-anchor": "middle"
+      });
+      provenanceLabel.textContent = provenance;
+      viewport.append(provenanceLabel);
+      const statusLabel = svgElement("text", {
+        x: position.x,
+        y: position.y + 73,
+        class: "graph-node-meta",
+        "text-anchor": "middle"
+      });
+      statusLabel.textContent = node.status_label || "Belum ada data";
+      viewport.append(statusLabel);
     });
     svg.append(viewport);
     scroll.append(svg);
@@ -428,7 +471,7 @@
     svg.addEventListener("pointerup", endDrag);
     svg.addEventListener("pointercancel", endDrag);
     const legend = element("div", "graph-legend");
-    ["BERSIH", "WASPADA", "TIDAK_LAYAK", "belum_diuji"].forEach((status) => {
+    ["BERSIH", "WASPADA", "TIDAK_LAYAK", "belum_diuji", "belum_ada"].forEach((status) => {
       legend.append(statusBadge(status));
     });
     const resultPanel = element("div", "graph-result");
